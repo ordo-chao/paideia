@@ -1,0 +1,72 @@
+import { DataTypes } from 'sequelize';
+import sequelize from '../Utils/db.js';
+
+const Ticket = sequelize.define(
+  'tickets',
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
+    },
+    event_id: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
+    ticket_name: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    ticket_price: {
+      type: DataTypes.FLOAT,
+      allowNull: false
+    },
+    ticket_for:{
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 1
+    },
+    ticket_quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
+        start_date: { type: DataTypes.DATE, allowNull: true },
+    end_date: { type: DataTypes.DATE, allowNull: true },
+    scope: {
+    type: DataTypes.ENUM("public", "institution", "private"),
+    defaultValue: "public",
+  },
+    updated_at: {
+     type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
+    deleted_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    }
+  },
+  {
+    freezeTableName: true,
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    paranoid: true,
+    deletedAt: 'deleted_at',
+    defaultScope: {
+      attributes: { exclude: ['created_at', 'updated_at', 'deleted_at' , 'scope'] }
+    },
+    indexes: [
+      {
+        fields: ['event_id', 'ticket_name']
+      }
+    ]
+  }
+);
+
+export default Ticket;

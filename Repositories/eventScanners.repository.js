@@ -1,0 +1,120 @@
+import {  EventScanner , User } from '../Models/index.js';
+import { Op } from "sequelize";
+
+export const createEventScannerRepository = async (eventScanner , options={}) => {
+  try {
+    // Check if scanner already exists
+    const existingScanner = await EventScanner.findOne({
+      where: {
+        event_id: eventScanner.event_id,
+        user_id: eventScanner.user_id,
+      },
+      include: [
+        {
+          model: User,
+          as: "user",
+        },
+      ],
+    } , options);
+
+    if (existingScanner) {
+      return existingScanner;
+    }
+
+    // Create new scanner
+    const createdScanner = await EventScanner.create(eventScanner , options);
+
+    // Re-fetch with User included
+    const scannerWithUser = await EventScanner.findByPk(
+      createdScanner.id,
+      {
+        include: [
+          {
+            model: User,
+            as: "user",
+          },
+        ],
+      }, options
+    );
+
+    return scannerWithUser;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getEventScannerByUserIdEventIdRepository = async (userId, eventId) => {
+  try {
+    const scanner = await EventScanner.findOne({
+      where: {
+        user_id: userId,
+        event_id: eventId,
+      },
+    });
+
+    if (!scanner) return null;
+
+    return scanner;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getEventScannerByEventIdRepository = async (eventId , limitPlusOne, offset) => {
+  try {
+    const scanner = await EventScanner.findAll({
+      where: {
+        event_id: eventId,
+      },
+      include: [
+        {
+          model: User,
+          as: "user",
+        },
+      ],
+      order: [["created_at", "DESC"]],
+      limit: limitPlusOne,
+      offset,
+    });
+
+    if (!scanner) return null;
+
+    return scanner;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const deleteEventScannerRepository = async (
+  scannerId,
+  organizer_id
+) => {
+  const scanner = await EventScanner.findByPk(scannerId);
+
+  if (!scanner) {
+    return null;
+  }
+
+  if (scanner.granted_by !== organizer_id) {
+    throw new Error("Unauthorized: You cannot delete this scanner");
+  }
+
+  await scanner.destroy();
+  return scanner;
+};
+  
+export const getTotalScannersByEventIdRepository = async (eventId) => {
+  try {
+    const totalScanners = await EventScanner.count({
+      where: {
+        event_id: eventId,
+      },
+    });
+
+    return totalScanners;
+  } catch (error) {
+    throw error;
+  }
+};
