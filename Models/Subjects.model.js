@@ -1,16 +1,28 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../Utils/db.js';
 
-const ScannedTickets = sequelize.define(
-  'scanned_tickets',
+const Subjects = sequelize.define(
+  'subjects',
   {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4
     },
-    attendee_id: {
-      type: DataTypes.UUID,
+    code: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    is_core: {
+      type: DataTypes.ENUM('core', 'elective'),
       allowNull: false
     },
     created_at: {
@@ -41,10 +53,10 @@ const ScannedTickets = sequelize.define(
     indexes: [
       {
         unique: true,
-        fields: ['attendee_id' , 'created_at']
+        fields: ['code']
       }
     ]
   }
 );
 
-export default ScannedTickets;
+export default Subjects;

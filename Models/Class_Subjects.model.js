@@ -1,22 +1,44 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../Utils/db.js';
 
-const TicketInstitution = sequelize.define("ticket_institutions", {
+const ClassSubjects = sequelize.define("class_subjects", {
   id: {
     type: DataTypes.UUID,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
   },
 
-  ticket_id: {
+  class_stream_id: {
     type: DataTypes.UUID,
     allowNull: false,
   },
 
-  institution_id: {
+  subject_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-  }
+  },
+  teacher_id: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
+  periods_per_week: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  created_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+  updated_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+  deleted_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
 },
  {
     freezeTableName: true,
@@ -36,9 +58,9 @@ const TicketInstitution = sequelize.define("ticket_institutions", {
     indexes: [
       {
         unique: true,
-        fields: ['id', 'institution_id']
+        fields: ['class_stream_id', 'subject_id']
       }
     ]
   }
 );
-export default TicketInstitution;
+export default ClassSubjects;

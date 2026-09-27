@@ -1,65 +1,45 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../Utils/db.js";
 
-const PaymentInfo = sequelize.define(
-  "payment_infos",
+const Institution = sequelize.define(
+  "institution",
   {
     id: {
       type: DataTypes.UUID,
+      allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
     },
-
-    event_id: {
+    academic_year_id: {
       type: DataTypes.UUID,
       allowNull: false,
-      unique: true,
     },
-
-    payment_type: {
-      type: DataTypes.ENUM(
-        "MPESA_PAYBILL",
-        "MPESA_TILL",
-        "MPESA_SEND_MONEY",
-        "POSHI_LA_BIASHARA",
-      ),
+    name: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    start_date: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    end_date: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    is_current: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: true,
     },
-
-    /* ========= PAYBILL ========= */
-    paybill_number: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    paybill_account_number: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-
-    /* ========= TILL ========= */
-    till_number: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-
-    /* ========= SEND MONEY ========= */
-    phone_number: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-
     updated_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-
     deleted_at: {
       type: DataTypes.DATE,
       allowNull: true,
@@ -75,4 +55,4 @@ const PaymentInfo = sequelize.define(
   }
 );
 
-export default PaymentInfo;
+export default Institution

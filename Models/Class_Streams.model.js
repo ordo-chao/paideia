@@ -1,45 +1,42 @@
-// models/QuestionResponse.js
+// models/ClassStreams.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../Utils/db.js';
 
-const QuestionResponse = sequelize.define(
-  'question_responses',
+const ClassStreams = sequelize.define(
+  'class_streams',
   {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4
     },
-    question_id: {
+    class_level_id: {
       type: DataTypes.UUID,
       allowNull: false,
-      references: {
-        model: 'dynamic_questions',
-        key: 'id'
-      }
     },
-    event_id: {
+    academic_year_id: {
       type: DataTypes.UUID,
       allowNull: false,
-      references: {
-        model: 'events',
-        key: 'id'
-      }
     },
-    user_id: {
-      type: DataTypes.UUID,
+    name: {
+      type: DataTypes.STRING,
       allowNull: false
-      // references: { model: 'users', key: 'id' }
     },
-    registration_id: {
+    full_name: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    capacity: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    class_teacher_id: {
       type: DataTypes.UUID,
       allowNull: true
-      // references: { model: 'registrations', key: 'id' }
     },
-    response_value: {
-      type: DataTypes.JSONB,
+    room_number: {
+      type: DataTypes.STRING,
       allowNull: true
-      // Can store string, number, array (for multiselect), etc.
     },
     created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW }
@@ -52,10 +49,10 @@ const QuestionResponse = sequelize.define(
     indexes: [
       {
         unique: true,
-        fields: ['question_id', 'user_id', 'event_id']
+        fields: ['class_level_id', 'academic_year_id']
       }
     ]
   }
 );
 
-export default QuestionResponse;
+export default ClassStreams;

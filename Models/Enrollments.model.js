@@ -1,36 +1,37 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../Utils/db.js';
 
-const TicketInvite = sequelize.define("ticket_invites", {
+const Enrollments = sequelize.define("enrollments", {
   id: {
     type: DataTypes.UUID,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
   },
 
-  ticket_id: {
+  student_id: {
     type: DataTypes.UUID,
     allowNull: false,
   },
 
-  token: {
-    type: DataTypes.STRING,
-    unique: true,
+  class_stream_id: {
+    type: DataTypes.UUID,
   },
 
-  expires_at: {
+  academic_year_id: {
+    type: DataTypes.UUID,
+  },
+
+  enrolled_on: {
     type: DataTypes.DATE,
+    allowNull: false,
   },
 
-  max_uses: {
-    type: DataTypes.INTEGER,
-    defaultValue: 100,
+  status: {
+    type: DataTypes.ENUM('active', 'inactive', 'completed'),
+    allowNull: false,
+    defaultValue: 'active',
   },
 
-  used_count: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-  }
 },
  {
     freezeTableName: true,
@@ -50,10 +51,10 @@ const TicketInvite = sequelize.define("ticket_invites", {
     indexes: [
       {
         unique: true,
-        fields: ['id', 'token']
+        fields: ['student_id', 'class_stream_id', 'academic_year_id']
       }
     ]
   }
 );
 
-export default TicketInvite;
+export default Enrollments;
