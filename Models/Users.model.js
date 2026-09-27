@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../Utils/db.js';
 
-const User = sequelize.define(
+const Users = sequelize.define(
   'users',
   {
     id: {
@@ -9,9 +9,12 @@ const User = sequelize.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4
     },
-    username: {
+    first_name: {
       type: DataTypes.STRING,
-      unique: true,
+      allowNull: true
+    },
+    last_name: {
+      type: DataTypes.STRING,
       allowNull: true
     },
     email: {
@@ -19,8 +22,29 @@ const User = sequelize.define(
       unique: true,
       validate: { isEmail: true }
     },
-    name: DataTypes.STRING,
-    phone: DataTypes.STRING,
+    gender: {
+      type: DataTypes.ENUM('male', 'female'),
+      allowNull: false,
+      defaultValue: 'male'
+    },
+    phone: { 
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    role: {
+      type: DataTypes.ENUM('admin', 'teacher' , 'student', 'parent' , 'staff'),
+      allowNull: false,
+      defaultValue: 'student'
+    },
+    is_active: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
+    },
     created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     updated_at: { type: DataTypes.DATE, allowNull: true },
     deleted_at: { type: DataTypes.DATE, allowNull: true }
@@ -45,4 +69,4 @@ const User = sequelize.define(
   }
 );
 
-export default User;
+export default Users;

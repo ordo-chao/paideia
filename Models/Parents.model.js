@@ -1,35 +1,28 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../Utils/db.js';
 
-const EventInvite = sequelize.define("event_invites", {
-  id: {
+const Parents = sequelize.define("parents", {
+  user_id: {
     type: DataTypes.UUID,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
   },
-
-  event_id: {
-    type: DataTypes.UUID,
+  relationship: {
+    type: DataTypes.ENUM("Father", "Mother", "Guardian"),
     allowNull: false,
+    defaultValue: "Guardian",
   },
-
-  token: {
+  alternate_phone: {
     type: DataTypes.STRING,
     unique: true,
   },
-
-  expires_at: {
-    type: DataTypes.DATE,
+  occupation: {
+    type: DataTypes.STRING,
   },
-
-  max_uses: {
-    type: DataTypes.INTEGER,
-    defaultValue: 100,
-  },
-
-  used_count: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
+  is_primary_contact: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
   }
 },
  {
@@ -50,10 +43,10 @@ const EventInvite = sequelize.define("event_invites", {
     indexes: [
       {
         unique: true,
-        fields: ['id', 'token']
+        fields: ['user_id', 'relationship']
       }
     ]
   }
 );
 
-export default EventInvite;
+export default Parents;
