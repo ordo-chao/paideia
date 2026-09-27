@@ -1,33 +1,44 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../Utils/db.js';
 
-const Ticket = sequelize.define(
-  'tickets',
+const Dormitorys = sequelize.define(
+  'dormitorys',
   {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4
     },
-    event_id: {
-      type: DataTypes.UUID,
-      allowNull: false
-    },
-    ticket_name: {
+    name: {
       type: DataTypes.STRING,
       allowNull: true
     },
-    ticket_price: {
-      type: DataTypes.FLOAT,
+    code: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    gender: {
+      type: DataTypes.ENUM('male', 'female' , 'mixed'),
       allowNull: false
     },
-    ticket_for:{
+    capacity:{
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: 1
     },
-    ticket_quantity: {
-      type: DataTypes.INTEGER,
+    warden_id: {
+      type: DataTypes.UUID,
+      allowNull: false
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    is_active: {
+      type: DataTypes.BOOLEAN,
       allowNull: false
     },
     created_at: {
@@ -35,12 +46,6 @@ const Ticket = sequelize.define(
       allowNull: false,
       defaultValue: DataTypes.NOW
     },
-        start_date: { type: DataTypes.DATE, allowNull: true },
-    end_date: { type: DataTypes.DATE, allowNull: true },
-    scope: {
-    type: DataTypes.ENUM("public", "institution", "private"),
-    defaultValue: "public",
-  },
     updated_at: {
      type: DataTypes.DATE,
       allowNull: false,
@@ -63,10 +68,10 @@ const Ticket = sequelize.define(
     },
     indexes: [
       {
-        fields: ['event_id', 'ticket_name']
+        fields: ['warden_id' , 'id' , 'name']
       }
     ]
   }
 );
 
-export default Ticket;
+export default Dormitorys;

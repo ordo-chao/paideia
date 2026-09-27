@@ -1,22 +1,41 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../Utils/db.js';
 
-const UserInstitution = sequelize.define("user_institutions", {
+const DormBeds = sequelize.define("dorm_beds", {
   id: {
     type: DataTypes.UUID,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
   },
 
-  user_id: {
+  room_id: {
     type: DataTypes.UUID,
     allowNull: false,
   },
 
-  institution_id: {
-    type: DataTypes.INTEGER,
+  bed_label: {
+    type: DataTypes.STRING,
     allowNull: false,
-  }
+  },
+  is_occupied: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+  created_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+  updated_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+  deleted_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
 },
  {
     freezeTableName: true,
@@ -36,9 +55,9 @@ const UserInstitution = sequelize.define("user_institutions", {
     indexes: [
       {
         unique: true,
-        fields: ['user_id', 'institution_id']
+        fields: ['room_id' , 'bed_label']
       }
     ]
   }
 );
-export default UserInstitution;
+export default DormBeds;
