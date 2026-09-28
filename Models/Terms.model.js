@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../Utils/db.js";
 
-const Institution = sequelize.define(
-  "institution",
+const Terms = sequelize.define(
+  "terms",
   {
     id: {
       type: DataTypes.UUID,
@@ -55,4 +55,4 @@ const Institution = sequelize.define(
   }
 );
 
-export default Institution
+export default Terms

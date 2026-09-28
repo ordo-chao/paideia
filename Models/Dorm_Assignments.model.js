@@ -76,3 +76,8 @@ const DormAssignments = sequelize.define("dorm_assignments", {
   }
 );
 export default DormAssignments;
+
+//  TODO: add foreign keys
+//  FIXME: add foreign keys
+//  BUG: add foreign keys
+
