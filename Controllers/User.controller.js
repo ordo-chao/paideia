@@ -1,50 +1,26 @@
 import {
-  createUserRepository,
-  getUserByIdRepository,
-  updateUserRepository,
-  getUserByUsernameRepository
-} from '../Repositories/User.repository.js';
-
-import { logs } from '../Utils/logs.js';
+  createUserService,
+  updateUserService,
+  deleteUserService,
+  loginUserService,
+  getUserService,
+  getUsersService,
+} from '../Services/User.service.js';
+import {generateToken} from '../Utils/JWT.js'
 
 
 export const createUserController = async (req, res) => {
   const start = process.hrtime.bigint();
 
   try {
-    const user = await createUserRepository(req.body);
+    const user = await createUserService(req.body);
 
-    const end = process.hrtime.bigint();
-    const durationMicroseconds = Number(end - start) / 1000;
-
-    logs(
-      durationMicroseconds,
-      "INFO",
-      req.ip,
-      req.method,
-      "User created successfully",
-      req.originalUrl,
-      201,
-      req.headers["user-agent"]
-    );
-
+    req.log.info({ userId: req.params.id }, 'User created');
     res.status(201).json(user);
+
   } catch (error) {
-    const end = process.hrtime.bigint();
-    const durationMicroseconds = Number(end - start) / 1000;
-
-    logs(
-      durationMicroseconds,
-      "ERROR",
-      req.ip,
-      req.method,
-      error.message,
-      req.originalUrl,
-      500,
-      req.headers["user-agent"]
-    );
-
-    res.status(500).json({ message: error.message });
+    req.log.error({ err: error })
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -53,158 +29,97 @@ export const getUserByIdController = async (req, res) => {
   const start = process.hrtime.bigint();
 
   try {
-    const user = await getUserByIdRepository(req.user?.sub);
+    const userId = req.params.id;
+    const user = await getUserService(userId);
 
-    const end = process.hrtime.bigint();
-    const durationMicroseconds = Number(end - start) / 1000;
-
-    logs(
-      durationMicroseconds,
-      "INFO",
-      req.ip,
-      req.method,
-      "User fetched successfully",
-      req.originalUrl,
-      200,
-      req.headers["user-agent"]
-    );
-
+    req.log.info({ userId: req.params.id }, 'Fetching user');
     res.status(200).json(user);
+
   } catch (error) {
-    const end = process.hrtime.bigint();
-    const durationMicroseconds = Number(end - start) / 1000;
-
-    logs(
-      durationMicroseconds,
-      "ERROR",
-      req.ip,
-      req.method,
-      error.message,
-      req.originalUrl,
-      500,
-      req.headers["user-agent"]
-    );
-
-    res.status(500).json({ message: error.message });
+    req.log.error({ err: error })
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
+
+export const getUserProfileController = async (req, res) => {
+  const start = process.hrtime.bigint();
+
+  try {
+    console.log(req.user);
+    const userId = req.user.id;
+    const user = await getUserService(userId);
+
+    req.log.info({ userId: req.params.id }, 'Fetching user profile');
+    res.status(200).json(user);
+
+  } catch (error) {
+    req.log.error({ err: error })
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+}
 
 
 export const updateUserController = async (req, res) => {
   const start = process.hrtime.bigint();
 
   try {
-    const organizer_id = req.user.sub;
-    const user = await updateUserRepository(organizer_id, req.body);
+    const userId = req.user.id;
+    const user = await updateUserService(userId, req.body);
 
-    const end = process.hrtime.bigint();
-    const durationMicroseconds = Number(end - start) / 1000;
-
-    logs(
-      durationMicroseconds,
-      "INFO",
-      req.ip,
-      req.method,
-      "User updated successfully",
-      req.originalUrl,
-      200,
-      req.headers["user-agent"]
-    );
-
+    req.log.info({ userId: req.params.id }, 'User updated');
     res.status(200).json(user);
+
   } catch (error) {
-    const end = process.hrtime.bigint();
-    const durationMicroseconds = Number(end - start) / 1000;
-
-    logs(
-      durationMicroseconds,
-      "ERROR",
-      req.ip,
-      req.method,
-      error.message,
-      req.originalUrl,
-      500,
-      req.headers["user-agent"]
-    );
-
-    res.status(500).json({ message: error.message });
+   req.log.error({ err: error })
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
-
-
-
-export const getUserByUsernameController = async (req, res) => {
+export const deleteUserController = async (req, res) => {
   const start = process.hrtime.bigint();
 
   try {
-        const { q } = req.query;
-    const searchQuery = q?.trim() || "";
+    const userId = req.user.id;
+    await deleteUserService(userId);
 
-       if (!searchQuery) {
-      const duration = Number(process.hrtime.bigint() - start);
+    req.log.info({ userId: req.params.id }, 'User deleted');
+    res.status(200).json({ message: "User deleted successfully" });
 
-      logs(
-        duration,
-        "WARN",
-        req.ip,
-        req.method,
-        "Missing search query",
-        req.originalUrl,
-        400,
-        req.headers["user-agent"]
-      );
-
-      return res
-        .status(400)
-        .json({ error: "Missing search query parameter (?q=...)" });
-    }
-
-    const results = await getUserByUsernameRepository(searchQuery);
-
-    const end = process.hrtime.bigint();
-    const durationMicroseconds = Number(end - start) / 1000;
-
-    logs(
-      durationMicroseconds,
-      "INFO",
-      req.ip,
-      req.method,
-      "Search performed",
-      req.originalUrl,
-      200,
-      req.headers["user-agent"]
-    );
-    
-    if (!results || results.length === 0) {
-      return res.status(200).json(
-        {
-      count: results.length,
-      data: results,
-    }
-      );
-    }
-
-
-        return res.status(200).json({
-      count: results.length,
-      data: results,
-    });
   } catch (error) {
-    const end = process.hrtime.bigint();
-    const durationMicroseconds = Number(end - start) / 1000;
+    req.log.error({ err: error })
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+}
 
-    logs(
-      durationMicroseconds,
-      "ERROR",
-      req.ip,
-      req.method,
-      error.message,
-      req.originalUrl,
-      500,
-      req.headers["user-agent"]
-    );
+export const loginUserController = async (req, res) => {
+  const start = process.hrtime.bigint();
 
-    res.status(500).json({ message: error.message });
+  try {
+    const { email, password } = req.body;
+    
+    const user = await loginUserService(email, password );
+    const JWTToken = await generateToken(user);
+
+    req.log.info({ userId: req.params.id }, 'User logged in');
+    res.status(200).json({...user  , token: JWTToken});
+
+  } catch (error) {
+    req.log.error({ err: error })
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+};
+
+export const getUsersController = async (req, res) => {
+  const start = process.hrtime.bigint();
+
+  try {
+    const users = await getUsersService();
+
+    req.log.info({ userId: req.params.id }, 'Users fetched');
+    res.status(200).json(users);
+
+  } catch (error) {
+    req.log.error({ err: error })
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };

@@ -43,8 +43,9 @@ const Users = sequelize.define(
     is_active: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: true
+      defaultValue: false
     },
+    last_seen: { type: DataTypes.DATE, allowNull: true },
     created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     updated_at: { type: DataTypes.DATE, allowNull: true },
     deleted_at: { type: DataTypes.DATE, allowNull: true }
@@ -57,13 +58,12 @@ const Users = sequelize.define(
     paranoid: true,
     deletedAt: 'deleted_at',
 
-    // hide timestamps by default
     defaultScope: {
-      attributes: { exclude: ['created_at', 'updated_at', 'deleted_at'] }
+      attributes: { exclude: ['password'] }
     },
     scopes: {
-      withDeleted: {
-        attributes: { include: ['deleted_at'] }
+      withPassword: {
+        attributes: { include: ['password'] }
       }
     }
   }

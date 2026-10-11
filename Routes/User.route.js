@@ -3,17 +3,25 @@ import {
   createUserController,
   getUserByIdController,
   updateUserController,
-  getUserByUsernameController
+  deleteUserController,
+  loginUserController,
+  getUserProfileController,
+  getUsersController
 } from "../Controllers/User.controller.js";
 
 const router = express.Router();
-import {verifyToken} from "../Middleware/jwt_token_verification.js";
+import {verifyToken} from "../Utils/JWT.js";
 
-router.use(verifyToken);
+// router.use(verifyToken);
 
-router.post("/", createUserController);
-router.get("/", getUserByIdController);
-router.put("/", updateUserController);
-router.get("/search", getUserByUsernameController);
+router.post("/login", loginUserController);
+router.get("/profile", verifyToken, getUserProfileController);
+
+router.post("/register", createUserController);
+router.get("/get/:id", verifyToken, getUserByIdController);
+router.put("/", verifyToken, updateUserController);
+router.delete("/", verifyToken, deleteUserController);
+router.get("/all", verifyToken, getUsersController);
+
 
 export default router;

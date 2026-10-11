@@ -32,15 +32,15 @@ const Teachers = sequelize.define("teachers", {
     allowNull: false,
   },
   qualification: {
-    type: DataTypes.Text,
+    type: DataTypes.TEXT, 
     allowNull: false,
   },
   specialization: {
-    type: DataTypes.Text,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   employment_type: {
-    type: DataTypes.Text,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   status : {
