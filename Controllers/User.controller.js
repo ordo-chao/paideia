@@ -19,7 +19,11 @@ export const createUserController = async (req, res) => {
     res.status(201).json(user);
 
   } catch (error) {
-    req.log.error({ err: error })
+    if(error.statusCode === 400 || error.statusCode === 409){
+      req.log.warn({ err: error })
+    }else{
+      req.log.error({ err: error })
+    }
     res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
@@ -45,7 +49,6 @@ export const getUserProfileController = async (req, res) => {
   const start = process.hrtime.bigint();
 
   try {
-    console.log(req.user);
     const userId = req.user.id;
     const user = await getUserService(userId);
 
@@ -80,6 +83,7 @@ export const deleteUserController = async (req, res) => {
 
   try {
     const userId = req.user.id;
+    console.log(userId)
     await deleteUserService(userId);
 
     req.log.info({ userId: req.params.id }, 'User deleted');

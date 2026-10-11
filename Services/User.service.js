@@ -10,16 +10,15 @@ import {
 } from '../Repositories/User.repository.js';
 
 import { comparePassword , hashPassword } from '../Utils/bcrypt.js';
-import { generateToken } from '../Utils/JWT.js';
 
 export const createUserService = async (data) => {
 
     const {email , first_name ,last_name , phone , password , role , gender } = data
 
-    // verify if a user exists
-    const deletedUser = await checkDeletedUserRepository(email);
-    if (deletedUser) {
-      const err =  new Error('User already exists');
+
+    // verify email 
+    if (!email || !email.includes('@')) {
+      const err =  new Error('Invalid email');
       err.statusCode = 400;
       throw err;
     }
@@ -38,6 +37,25 @@ export const createUserService = async (data) => {
       throw err;
     }
 
+        // verify if a user exists
+    const existing = await checkDeletedUserRepository(email);
+  if (existing) {
+    if (existing.deleted_at === null) {
+      const err = new Error('User already exists');
+      err.statusCode = 400;
+      throw err;
+    }
+
+    // Strategy A: reject (simplest)
+    const err = new Error('This email belongs to a deactivated account. Contact support.');
+    err.statusCode = 409;
+    throw err;
+
+  //  TODO Strategy B: reactivate account
+  }
+
+    console.log(existing)
+
     // Hash password
     const hashedPassword = await hashPassword(password);
 
@@ -45,7 +63,9 @@ export const createUserService = async (data) => {
     const user = await createUserRepository({email , first_name ,last_name , phone , password:hashedPassword , role , gender });
 
     // TODO: Send email to user
-    return user;
+
+      const { password: _, ...userWithoutPassword } = user.toJSON();
+    return userWithoutPassword;
 }
 
 export const updateUserService = async (id, data) => {

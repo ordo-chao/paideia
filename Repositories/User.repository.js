@@ -6,6 +6,7 @@ export const createUserRepository = async (data) => {
     const user = await User.create(data);
     return user;
   } catch (error) {
+    console.log(error)
     throw error;
   }
 }
@@ -93,10 +94,14 @@ export const searchuserRepository = async (query) => {
 
 export const checkDeletedUserRepository = async (email) => {
   try {
-    const user = await User.unscoped().findOne({ where: { email } }, { attributes: { include: ['password'] } })
-  return user
+    const user = await User.unscoped().findOne({
+      where: { email },
+      attributes: { include: ['password'] },
+      paranoid: false              // ✅ THIS is what includes soft-deleted rows
+    });
+    return user;
   } catch (error) {
-          const err =  new Error(error.message);
+    const err = new Error(error.message);
     throw err;
   }
-}
+};
