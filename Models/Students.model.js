@@ -8,18 +8,9 @@ const Students = sequelize.define(
       type: DataTypes.UUID,
       primaryKey: true,
     },
-    full_name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     birth_date: {
       type: DataTypes.DATE,
       allowNull: false
-    },
-    gender: {
-      type: DataTypes.ENUM('male', 'female'),
-      allowNull: false,
-      defaultValue: 'male'
     },
     nationality: {
       type: DataTypes.STRING,

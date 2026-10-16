@@ -9,6 +9,8 @@ import {
   getUsersRepository
 } from '../Repositories/User.repository.js';
 
+import {createStudentService , deleteStudentService} from '../Services/Student.service.js'
+
 import { comparePassword , hashPassword } from '../Utils/bcrypt.js';
 
 export const createUserService = async (data) => {
@@ -54,13 +56,18 @@ export const createUserService = async (data) => {
   //  TODO Strategy B: reactivate account
   }
 
-    console.log(existing)
-
     // Hash password
     const hashedPassword = await hashPassword(password);
 
     // Create user if user does not exist
     const user = await createUserRepository({email , first_name ,last_name , phone , password:hashedPassword , role , gender });
+
+    // create according to role
+
+    // studemt
+    if (role === 'student') {
+      await createStudentService({user_id: user.id , status:'active'})
+    }
 
     // TODO: Send email to user
 
@@ -100,6 +107,10 @@ export const deleteUserService = async (id) => {
 
     // Delete user
     const user = await deleteUserRepository(id);
+
+    if (user.role === 'student') {
+      await deleteStudentService(user.id)
+    }
 
     // TODO: Send email to user
     return user;
