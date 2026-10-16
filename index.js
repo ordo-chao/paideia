@@ -61,7 +61,6 @@ app.use('/user', userRouter);
 app.listen(PORT, async () => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync({ alter: true });
 
     log.info("Models synced...");
     log.info(`Server running on port ${PORT}`);

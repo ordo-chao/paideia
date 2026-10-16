@@ -83,7 +83,6 @@ export const deleteUserController = async (req, res) => {
 
   try {
     const userId = req.user.id;
-    console.log(userId)
     await deleteUserService(userId);
 
     req.log.info({ userId: req.params.id }, 'User deleted');

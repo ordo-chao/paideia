@@ -20,25 +20,38 @@ const Users = sequelize.define(
     email: {
       type: DataTypes.STRING,
       unique: true,
+      allowNull: false,
       validate: { isEmail: true }
     },
     gender: {
       type: DataTypes.ENUM('male', 'female'),
       allowNull: false,
-      defaultValue: 'male'
+      defaultValue: 'male',
+      validate: {
+        isIn: {
+          args: [['male', 'female']],
+          msg: 'gender must be male or female',
+        },
+      },
     },
-    phone: { 
+    role: {
+      type: DataTypes.ENUM('admin', 'teacher', 'student', 'parent', 'staff'),
+      allowNull: false,
+      defaultValue: 'student',
+      validate: {
+        isIn: {
+          args: [['admin', 'teacher', 'student', 'parent', 'staff']],
+          msg: 'invalid role',
+        },
+      },
+    },
+    phone: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-    role: {
-      type: DataTypes.ENUM('admin', 'teacher' , 'student', 'parent' , 'staff'),
-      allowNull: false,
-      defaultValue: 'student'
     },
     is_active: {
       type: DataTypes.BOOLEAN,
