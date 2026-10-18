@@ -67,6 +67,8 @@ test('model is wired to the mocked sequelize instance', async () => {
   expect(db.default).toBe(mockSequelize);
 });
 
+// NOTE: read from below
+
 // =============================================================
 // 5. Table-level options
 // =============================================================

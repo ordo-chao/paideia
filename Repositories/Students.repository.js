@@ -24,6 +24,8 @@ export const getStudentByIdRepository = async (id) => {
            },
         },
       ],
+      attributes: { exclude: ['user_id'] },
+      raw: true
     });
     return student;
   } catch (error) {
@@ -60,6 +62,8 @@ export const getStudentsRepository = async () => {
            },
         },
       ],
+      attributes: { exclude: ['user_id'] },
+      raw: true
     });
     return students;
   } catch (error) {

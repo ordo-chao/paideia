@@ -17,6 +17,11 @@ export const createUserService = async (data) => {
 
     const {email , first_name ,last_name , phone , password , role , gender } = data
 
+    // Construct student object
+    const {birth_date ,nationality , address , photo_url , enrollment_date , current_grade ,
+      allergies , medical_notes
+     } = data
+
 
     // verify email 
     if (!email || !email.includes('@')) {
@@ -66,7 +71,8 @@ export const createUserService = async (data) => {
 
     // studemt
     if (role === 'student') {
-      await createStudentService({user_id: user.id , status:'active'})
+      await createStudentService({user_id: user.id , status:'active' , birth_date ,nationality , address , photo_url , enrollment_date , current_grade ,
+      allergies , medical_notes})
     }
 
     // TODO: Send email to user

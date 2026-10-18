@@ -36,7 +36,13 @@ const Students = sequelize.define(
     status: {
       type: DataTypes.ENUM('active', 'suspended' , 'graduated' , 'transferred' , 'dropped'),
       allowNull: false,
-      defaultValue: 'active'
+      defaultValue: 'active',
+      validate: {
+        isIn: {
+          args: [['active', 'suspended' , 'graduated' , 'transferred' , 'dropped']],
+          msg: 'invalid status',
+        },
+      },
     },
     allergies: {
       type: DataTypes.TEXT,

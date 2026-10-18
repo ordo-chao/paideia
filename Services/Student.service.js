@@ -18,7 +18,6 @@ export const createStudentService = async (data) => {
       allergies , medical_notes
      } = data
 
-
     // verify dates
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(birth_date) || !dateRegex.test(enrollment_date)) {
