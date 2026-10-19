@@ -4,7 +4,8 @@ import {
   updateStudentRepository,
   getStudentsRepository,
   deleteStudentRepository,
-searchStudentRepository
+searchStudentRepository,
+  getParentsRepository
 } from '../Repositories/Students.repository.js';
 
 import {
@@ -120,4 +121,9 @@ export const getStudentsService = async () => {
   // TODO: Add pagination
   const students = await getStudentsRepository();
   return students;
+}
+
+export const getParentsService = async (id) => {
+  const parents = await getParentsRepository(id);
+  return parents;
 }

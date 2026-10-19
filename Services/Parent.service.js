@@ -4,7 +4,9 @@ import {
   updateParentRepository,
   getParentsRepository,
   deleteParentRepository,
-searchParentRepository
+  searchParentRepository,
+  assignChildrenRepository,
+  getChildrenRepository
 } from '../Repositories/Parents.repository.js';
 
 import {
@@ -104,4 +106,54 @@ export const getParentsService = async () => {
   // TODO: Add pagination
   const parents = await getParentsRepository();
   return parents;
+}
+
+export const assignChildrenService = async (data) => {
+
+  const {parent_user_id ,student_user_id , relationship , is_primary_contact} = data
+
+    // verify user_id
+    const check_parent = await getUserByIdRepository(parent_user_id);
+    if (!check_parent) {
+      const err = new Error('User not found');
+      err.statusCode = 400;
+      throw err;
+    }
+
+    // check if user is a parent
+    if(check_parent.role !== 'parent') {
+      const err = new Error('User is not a parent');
+      err.statusCode = 400;
+      throw err;
+    }
+
+    // verify user_id
+    const check_student = await getUserByIdRepository(student_user_id);
+    if (!check_student) {
+      const err = new Error('User not found');
+      err.statusCode = 400;
+      throw err;
+    }
+
+    // check if user is a student
+    if(check_student.role !== 'student') {
+      const err = new Error('User is not a student');
+      err.statusCode = 400;
+      throw err;
+    }
+
+    // verify status 
+    if (relationship !== 'father' && relationship !== 'mother' && relationship !== 'guardian' ) {
+      const err =  new Error('Invalid status');
+      err.statusCode = 400;
+      throw err;
+    }
+
+  const guardian = await assignChildrenRepository({parent_user_id ,student_user_id , relationship , is_primary_contact});
+  return guardian;
+}
+
+export const getChildrenService = async (id) => {
+  const children = await getChildrenRepository(id);
+  return children;
 }

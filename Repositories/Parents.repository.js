@@ -1,4 +1,4 @@
-import {Parents as Parent , Users as User} from "../Models/index.js";
+import {Parents as Parent , Users as User , ParentStudent as Guardian , Students as Student } from "../Models/index.js";
 import { Op } from "sequelize";
 
 export const createParentRepository = async (data) => {
@@ -112,6 +112,43 @@ export const searchParentRepository = async (query) => {
 
   return users;
 };
+
+export const assignChildrenRepository = async (data) => {
+  try {
+    const guardian = await Guardian.create(data);
+    return guardian;
+  } catch (error) {
+    console.log(error)
+    throw error;
+  }
+}
+
+export const getChildrenRepository = async (id) => {
+  try {
+    // id = parent's user_id (the parent user)
+    const parent = await Guardian.findByPk(id, {
+      include: [
+        {
+          model: Student,
+          as: 'children',
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: { exclude: ['password' , 'id' , 'role' , 'deleted_at'] },
+              
+            },
+          ],
+        },
+      ],
+      attributes: { exclude: ['parent_user_id' , 'created_at' , 'updated_at'] },
+    });
+
+    return parent;
+  } catch (error) {
+    throw error;
+  }
+}
 
 // export const checkDeletedUserRepository = async (email) => {
 //   try {

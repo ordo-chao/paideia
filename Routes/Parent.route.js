@@ -3,7 +3,9 @@ import {
   getParentByIdController,
   getParentProfileController,
   updateParentController,
-  getParentsController
+  getParentsController,
+  assignChildrenController,
+  getChildrenController
 } from "../Controllers/Parents.controller.js";
 
 
@@ -16,6 +18,9 @@ router.get("/profile", getParentProfileController);
 router.get("/get/:id", getParentByIdController);
 router.put("/", updateParentController);
 router.get("/all", getParentsController);
+
+router.get("/children/:parent_id", getChildrenController);
+router.post("/assign", assignChildrenController);
 
 
 export default router;

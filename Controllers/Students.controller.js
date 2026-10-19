@@ -1,7 +1,8 @@
 import {
   updateStudentService,
   getStudentService,
-  getStudentsService
+  getStudentsService,
+  getParentsService
 } from '../Services/Student.service.js';
 
 
@@ -63,6 +64,22 @@ export const getStudentsController = async (req, res) => {
     const users = await getStudentsService();
 
     req.log.info({ userId: req.params.id }, 'Students fetched');
+    res.status(200).json(users);
+
+  } catch (error) {
+    req.log.error({ err: error })
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+};
+
+export const getParentsController = async (req, res) => {
+  const start = process.hrtime.bigint();
+
+  try {
+    const student_id = req.params.student_id
+    const users = await getParentsService(student_id);
+
+    req.log.info({ userId: req.params.id }, 'Parents fetched');
     res.status(200).json(users);
 
   } catch (error) {

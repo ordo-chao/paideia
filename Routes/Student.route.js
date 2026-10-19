@@ -3,7 +3,8 @@ import {
   getStudentByIdController,
   getStudentProfileController,
   updateStudentController,
-  getStudentsController
+  getStudentsController , 
+  getParentsController
 } from "../Controllers/Students.controller.js";
 
 
@@ -16,6 +17,8 @@ router.get("/profile", getStudentProfileController);
 router.get("/get/:id", getStudentByIdController);
 router.put("/", updateStudentController);
 router.get("/all", getStudentsController);
+
+router.get("/parents/:student_id", getParentsController);
 
 
 export default router;
