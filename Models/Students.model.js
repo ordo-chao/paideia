@@ -8,7 +8,7 @@ const Students = sequelize.define(
       type: DataTypes.UUID,
       primaryKey: true,
     },
-    birth_date: {
+    date_of_birth: {
       type: DataTypes.DATE,
       allowNull: false
     },

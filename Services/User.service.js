@@ -10,17 +10,20 @@ import {
 } from '../Repositories/User.repository.js';
 
 import {createStudentService , deleteStudentService} from '../Services/Student.service.js'
+import {createTeacherService , deleteTeacherService} from '../Services/Teacher.service.js'
 
 import { comparePassword , hashPassword } from '../Utils/bcrypt.js';
 
 export const createUserService = async (data) => {
 
-    const {email , first_name ,last_name , phone , password , role , gender } = data
+    const {email , first_name ,last_name , phone , password , role , gender , date_of_birth , address , photo_url, } = data
 
     // Construct student object
-    const {birth_date ,nationality , address , photo_url , enrollment_date , current_grade ,
+    const { nationality  , enrollment_date , current_grade ,
       allergies , medical_notes
      } = data
+
+     const {employee_id , start_date , end_date , qualification , specialization , employment_type } = data
 
 
     // verify email 
@@ -71,8 +74,12 @@ export const createUserService = async (data) => {
 
     // studemt
     if (role === 'student') {
-      await createStudentService({user_id: user.id , status:'active' , birth_date ,nationality , address , photo_url , enrollment_date , current_grade ,
+      await createStudentService({user_id: user.id , status:'active' , date_of_birth ,nationality , address , photo_url , enrollment_date , current_grade ,
       allergies , medical_notes})
+    }else if(role === 'teacher') {
+
+      await createTeacherService({user_id: user.id , status:'active' , employee_id , date_of_birth , address , photo_url,
+      start_date , end_date , qualification , specialization , employment_type})
     }
 
     // TODO: Send email to user

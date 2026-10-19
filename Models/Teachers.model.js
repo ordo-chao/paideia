@@ -7,7 +7,7 @@ const Teachers = sequelize.define("teachers", {
     primaryKey: true,
   },
   employee_id: {
-    type: DataTypes.UUID,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   date_of_birth: {

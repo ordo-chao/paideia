@@ -119,8 +119,8 @@ describe('Column: user_id', () => {
 
 describe('Column: birth date', () => {
   it('is a required DATE and not nullable', () => {
-    expect(attributes.birth_date.type).toBe('DATE');
-    expect(attributes.birth_date.allowNull).toBe(false);
+    expect(attributes.date_of_birth.type).toBe('DATE');
+    expect(attributes.date_of_birth.allowNull).toBe(false);
   });
 });
 
@@ -222,7 +222,7 @@ describe('Column inventory', () => {
     expect(Object.keys(attributes).sort()).toEqual(
       [
         'user_id',
-        'birth_date',
+        'date_of_birth',
         'nationality',
         'address',
         'photo_url',

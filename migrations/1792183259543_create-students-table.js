@@ -4,7 +4,7 @@ export const shorthands = undefined;
 
 export const up = (pgm) => {
   // 1. Create ENUM types first
-  pgm.createType('status_enum', ['active', 'suspended' , 'graduated' , 'transferred' , 'dropped']);
+  pgm.createType('student_status_enum', ['active', 'suspended' , 'graduated' , 'transferred' , 'dropped']);
 
   // 2. Create the students table
   pgm.createTable('students', {
@@ -12,11 +12,11 @@ export const up = (pgm) => {
       type: 'uuid',
       primaryKey: true,
     },
-    birth_date: { type: 'date', notNull: true },
+    date_of_birth: { type: 'date', notNull: true },
     nationality: { type: 'varchar(255)' },
     address: {type: 'varchar(255)',},
     status: {
-      type: 'status_enum',
+      type: 'student_status_enum',
       notNull: true,
       default: 'active',
     },
@@ -45,5 +45,5 @@ export const down = (pgm) => {
   pgm.dropIndex('students', 'deleted_at', { name: 'students_deleted_at_idx' });
   pgm.dropConstraint('students', 'students_status_check');
   pgm.dropTable('students');
-  pgm.dropType('status_enum');
+  pgm.dropType('student_status_enum');
 };

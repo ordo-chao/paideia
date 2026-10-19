@@ -35,6 +35,10 @@ import Users from './Users.model.js';
 Users.hasMany(Students, { foreignKey: 'user_id' , onDelete: 'CASCADE' });
 Students.belongsTo(Users, { foreignKey: 'user_id' , onDelete: 'CASCADE' });
 
+// Users has many Teachers and Teachers belongs to Users 1:1
+Users.hasMany(Teachers, { foreignKey: 'user_id' , onDelete: 'CASCADE' });
+Teachers.belongsTo(Users, { foreignKey: 'user_id' , onDelete: 'CASCADE' });
+
 
 export {
   AcademicYears,

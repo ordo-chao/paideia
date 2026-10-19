@@ -14,13 +14,14 @@ import {
 
 export const createStudentService = async (data) => {
 
-    const {user_id , birth_date ,nationality , address , photo_url , enrollment_date , current_grade , status,
+    const {user_id , date_of_birth ,nationality , address , photo_url , enrollment_date , current_grade , status,
       allergies , medical_notes
      } = data
 
+
     // verify dates
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(birth_date) || !dateRegex.test(enrollment_date)) {
+    if (!dateRegex.test(date_of_birth) || !dateRegex.test(enrollment_date)) {
       const err = new Error('Invalid date format');
       err.statusCode = 400;
       throw err;
@@ -28,7 +29,7 @@ export const createStudentService = async (data) => {
 
     // dates must be older than today and not future
     const today = new Date();
-    const birthDate = new Date(birth_date);
+    const birthDate = new Date(date_of_birth);
     const enrollmentDate = new Date(enrollment_date);
     if (birthDate > today || enrollmentDate > today) {
       const err = new Error('Invalid date');
@@ -52,7 +53,7 @@ export const createStudentService = async (data) => {
     }
 
     // Create student if user does exist
-    const student = await createStudentRepository({user_id , birth_date ,nationality , address , photo_url , enrollment_date , current_grade , status,
+    const student = await createStudentRepository({user_id , date_of_birth ,nationality , address , photo_url , enrollment_date , current_grade , status,
       allergies , medical_notes});
 
     return student;
@@ -60,7 +61,7 @@ export const createStudentService = async (data) => {
 
 export const updateStudentService = async (id, data) => {
 
-    const {birth_date ,nationality , address , photo_url , enrollment_date , current_grade , status,
+    const {date_of_birth ,nationality , address , photo_url , enrollment_date , current_grade , status,
       allergies , medical_notes  } = data
 
     // verify if a user exists
@@ -72,7 +73,7 @@ export const updateStudentService = async (id, data) => {
     }
 
     // Update user Details
-    const student = await updateStudentRepository(id, {birth_date ,nationality , address , photo_url , enrollment_date , current_grade , status,
+    const student = await updateStudentRepository(id, {date_of_birth ,nationality , address , photo_url , enrollment_date , current_grade , status,
       allergies , medical_notes});
 
     // TODO: Send email to student

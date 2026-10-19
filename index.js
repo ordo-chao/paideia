@@ -54,10 +54,13 @@ app.get("/", (req, res) => {
 
 import userRouter from './Routes/User.route.js';
 import studentRouter from './Routes/Student.route.js';
+import teacherRouter from './Routes/Teacher.route.js';
 
 
 app.use('/user', userRouter);
 app.use('/student', studentRouter);
+app.use('/teacher', teacherRouter);
+
 
 
 app.listen(PORT, async () => {
