@@ -1,8 +1,10 @@
-
 import pino from 'pino';
+import pretty from 'pino-pretty';
 
-const logger = pino({
-  level: 'info', 
-});
+const stream = process.stdout.isTTY
+  ? pretty({ colorize: true, translateTime: 'SYS:standard' })
+  : process.stdout;
 
-export default logger;
+const logger = pino({ level: process.env.LOG_LEVEL || 'info' }, stream);
+
+export { logger };

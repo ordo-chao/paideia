@@ -8,9 +8,9 @@ const Parents = sequelize.define("parents", {
     defaultValue: DataTypes.UUIDV4,
   },
   relationship: {
-    type: DataTypes.ENUM("Father", "Mother", "Guardian"),
+    type: DataTypes.ENUM("father", "mother", "guardian"),
     allowNull: false,
-    defaultValue: "Guardian",
+    defaultValue: "guardian",
   },
   alternate_phone: {
     type: DataTypes.STRING,
@@ -19,10 +19,12 @@ const Parents = sequelize.define("parents", {
   occupation: {
     type: DataTypes.STRING,
   },
-  is_primary_contact: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false,
+  alternate_email: {
+    type: DataTypes.STRING,
+    unique: true,
+  },
+  address : {
+    type: DataTypes.STRING,
   }
 },
  {

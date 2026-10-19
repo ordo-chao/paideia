@@ -20,14 +20,32 @@ const Users = sequelize.define(
     email: {
       type: DataTypes.STRING,
       unique: true,
+      allowNull: false,
       validate: { isEmail: true }
     },
     gender: {
       type: DataTypes.ENUM('male', 'female'),
       allowNull: false,
-      defaultValue: 'male'
+      defaultValue: 'male',
+      validate: {
+        isIn: {
+          args: [['male', 'female']],
+          msg: 'gender must be male or female',
+        },
+      },
     },
-    phone: { 
+    role: {
+      type: DataTypes.ENUM('admin', 'teacher', 'student', 'parent', 'staff'),
+      allowNull: false,
+      defaultValue: 'student',
+      validate: {
+        isIn: {
+          args: [['admin', 'teacher', 'student', 'parent', 'staff']],
+          msg: 'invalid role',
+        },
+      },
+    },
+    phone: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -35,16 +53,12 @@ const Users = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false
     },
-    role: {
-      type: DataTypes.ENUM('admin', 'teacher' , 'student', 'parent' , 'staff'),
-      allowNull: false,
-      defaultValue: 'student'
-    },
     is_active: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true
     },
+    last_seen: { type: DataTypes.DATE, allowNull: true },
     created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     updated_at: { type: DataTypes.DATE, allowNull: true },
     deleted_at: { type: DataTypes.DATE, allowNull: true }
@@ -57,13 +71,12 @@ const Users = sequelize.define(
     paranoid: true,
     deletedAt: 'deleted_at',
 
-    // hide timestamps by default
     defaultScope: {
-      attributes: { exclude: ['created_at', 'updated_at', 'deleted_at'] }
+      attributes: { exclude: ['password'] }
     },
     scopes: {
-      withDeleted: {
-        attributes: { include: ['deleted_at'] }
+      withPassword: {
+        attributes: { include: ['password'] }
       }
     }
   }

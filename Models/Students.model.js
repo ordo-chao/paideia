@@ -8,18 +8,9 @@ const Students = sequelize.define(
       type: DataTypes.UUID,
       primaryKey: true,
     },
-    full_name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    birth_date: {
+    date_of_birth: {
       type: DataTypes.DATE,
       allowNull: false
-    },
-    gender: {
-      type: DataTypes.ENUM('male', 'female'),
-      allowNull: false,
-      defaultValue: 'male'
     },
     nationality: {
       type: DataTypes.STRING,
@@ -45,7 +36,13 @@ const Students = sequelize.define(
     status: {
       type: DataTypes.ENUM('active', 'suspended' , 'graduated' , 'transferred' , 'dropped'),
       allowNull: false,
-      defaultValue: 'active'
+      defaultValue: 'active',
+      validate: {
+        isIn: {
+          args: [['active', 'suspended' , 'graduated' , 'transferred' , 'dropped']],
+          msg: 'invalid status',
+        },
+      },
     },
     allergies: {
       type: DataTypes.TEXT,

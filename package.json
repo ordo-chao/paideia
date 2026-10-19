@@ -1,12 +1,20 @@
 {
   "name": "paideia",
-  "version": "2.4.2",
+  "version": "0.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+  "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+  "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/Models/User.model.test.js tests/Controllers tests/Services tests/Repositories tests/Routes",
+  "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/Integration",
+  "start": "node index.js",
+  "dev": "nodemon index.js",
+  "migrate": "node-pg-migrate",
+  "migrate:up": "node-pg-migrate up",
+  "migrate:down": "node-pg-migrate down",
+  "migrate:create": "node-pg-migrate create",
+  "migrate:redo": "node-pg-migrate down && node-pg-migrate up",
+  "db:reset": "node scripts/dev-reset.js"
   },
   "type": "module",
   "author": "",
@@ -25,16 +33,22 @@
     "node-pg-migrate": "^8.0.3",
     "pg": "^8.16.3",
     "pg-hstore": "^2.3.4",
-    "pino": "^9.7.0",
+    "pino": "^9.14.0",
+    "pino-http": "^11.0.0",
+    "pino-pretty": "^13.2.0",
     "qrcode": "^1.5.4",
     "sequelize": "^6.37.8",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.5",
     "supertest": "^7.1.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.28.0",
-    "babel-jest": "^30.0.4",
-    "jest": "^30.0.4",
-    "nodemon": "^3.1.10"
+    "babel-jest": "^30.5.2",
+    "jest": "^30.5.2",
+    "nodemon": "^3.1.10",
+    "sqlite3": "^6.0.1"
+  },
+  "overrides": {
+    "uuid": "11.1.1"
   }
 }
