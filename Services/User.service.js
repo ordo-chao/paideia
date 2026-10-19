@@ -11,6 +11,7 @@ import {
 
 import {createStudentService , deleteStudentService} from '../Services/Student.service.js'
 import {createTeacherService , deleteTeacherService} from '../Services/Teacher.service.js'
+import { createParentService , deleteParentService } from './Parent.service.js';
 
 import { comparePassword , hashPassword } from '../Utils/bcrypt.js';
 
@@ -23,8 +24,11 @@ export const createUserService = async (data) => {
       allergies , medical_notes
      } = data
 
+    //  construct parent object
      const {employee_id , start_date , end_date , qualification , specialization , employment_type } = data
 
+    //  construct parent object
+    const { relationship , alternate_phone , occupation , alternate_email  } = data
 
     // verify email 
     if (!email || !email.includes('@')) {
@@ -77,9 +81,10 @@ export const createUserService = async (data) => {
       await createStudentService({user_id: user.id , status:'active' , date_of_birth ,nationality , address , photo_url , enrollment_date , current_grade ,
       allergies , medical_notes})
     }else if(role === 'teacher') {
-
       await createTeacherService({user_id: user.id , status:'active' , employee_id , date_of_birth , address , photo_url,
       start_date , end_date , qualification , specialization , employment_type})
+    }else if(role === 'parent') {
+      await createParentService({user_id: user.id  , relationship , alternate_phone , occupation , alternate_email , address})
     }
 
     // TODO: Send email to user
@@ -123,6 +128,8 @@ export const deleteUserService = async (id) => {
 
     if (user.role === 'student') {
       await deleteStudentService(user.id)
+    }else if(user.role === 'teacher') {
+      await deleteTeacherService(user.id)
     }
 
     // TODO: Send email to user

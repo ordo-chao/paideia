@@ -39,6 +39,11 @@ Students.belongsTo(Users, { foreignKey: 'user_id' , onDelete: 'CASCADE' });
 Users.hasMany(Teachers, { foreignKey: 'user_id' , onDelete: 'CASCADE' });
 Teachers.belongsTo(Users, { foreignKey: 'user_id' , onDelete: 'CASCADE' });
 
+// Users has many Parents and Parents belongs to Users 1:1
+Users.hasMany(Parents, { foreignKey: 'user_id' , onDelete: 'CASCADE' });
+Parents.belongsTo(Users, { foreignKey: 'user_id' , onDelete: 'CASCADE' });
+
+
 
 export {
   AcademicYears,
