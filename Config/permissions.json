@@ -1,0 +1,936 @@
+{
+  "$schema": "https://paideia.example/schemas/permissions-v1.json",
+  "version": "1.0.0",
+  "description": "Paideia school management — permissions catalog and admin position presets",
+
+  "permissionCatalog": {
+    "all": {
+      "label": "All Permissions (Super Admin)",
+      "description": "Grants unrestricted access to every module. Reserved for the Principal and system super-admin.",
+      "riskLevel": "critical"
+    },
+
+    "student:record:view":        { "label": "View student records",        "module": "students", "riskLevel": "low" },
+    "student:record:edit":        { "label": "Edit student records",        "module": "students", "riskLevel": "high" },
+    "student:enroll":             { "label": "Enroll students",             "module": "students", "riskLevel": "high" },
+    "student:discipline":         { "label": "Manage discipline",           "module": "students", "riskLevel": "high" },
+    "student:attendance":         { "label": "Manage attendance",           "module": "students", "riskLevel": "medium" },
+    "student:health:view":        { "label": "View medical / health info",  "module": "students", "riskLevel": "high" },
+    "student:fee:view":           { "label": "View student fees",           "module": "students", "riskLevel": "medium" },
+    "student:override":           { "label": "Override student actions",    "module": "students", "riskLevel": "critical" },
+
+    "transcript:manage":          { "label": "Manage transcripts",          "module": "academics", "riskLevel": "high" },
+    "grade:input":                { "label": "Input grades",                "module": "academics", "riskLevel": "medium" },
+    "grade:publish":              { "label": "Publish grades",              "module": "academics", "riskLevel": "high" },
+    "exam:manage":                { "label": "Manage exams",                "module": "academics", "riskLevel": "high" },
+    "exam:approve":               { "label": "Approve exams",               "module": "academics", "riskLevel": "high" },
+    "exam_schedule:manage":       { "label": "Manage exam schedule",        "module": "academics", "riskLevel": "high" },
+    "curriculum:manage":          { "label": "Manage curriculum",           "module": "academics", "riskLevel": "high" },
+    "curriculum:edit":            { "label": "Edit curriculum",             "module": "academics", "riskLevel": "high" },
+    "curriculum:approve":         { "label": "Approve curriculum",          "module": "academics", "riskLevel": "critical" },
+    "assessment:approve":         { "label": "Approve assessments",         "module": "academics", "riskLevel": "high" },
+    "syllabus:manage":            { "label": "Manage syllabus",             "module": "academics", "riskLevel": "medium" },
+    "textbook:approve":           { "label": "Approve textbooks",           "module": "academics", "riskLevel": "medium" },
+    "subject:manage":             { "label": "Manage subjects",             "module": "academics", "riskLevel": "high" },
+    "timetable:approve":          { "label": "Approve timetable",           "module": "academics", "riskLevel": "high" },
+    "schedule:manage":            { "label": "Manage schedule",             "module": "academics", "riskLevel": "high" },
+    "schedule:edit":              { "label": "Edit schedule",               "module": "academics", "riskLevel": "medium" },
+    "report:generate":            { "label": "Generate reports",            "module": "academics", "riskLevel": "medium" },
+    "academic_report:approve":    { "label": "Approve academic reports",    "module": "academics", "riskLevel": "high" },
+
+    "counseling:note:edit":       { "label": "Edit counseling notes",       "module": "counseling", "riskLevel": "high" },
+    "referral:create":            { "label": "Create referrals",            "module": "counseling", "riskLevel": "medium" },
+    "career:advise":              { "label": "Advise on careers",           "module": "counseling", "riskLevel": "low" },
+    "college_app:manage":         { "label": "Manage college applications", "module": "counseling", "riskLevel": "medium" },
+    "recommendation:write":       { "label": "Write recommendations",       "module": "counseling", "riskLevel": "low" },
+    "iep:manage":                 { "label": "Manage IEPs",                 "module": "sen", "riskLevel": "high" },
+    "accommodation:manage":       { "label": "Manage accommodations",       "module": "sen", "riskLevel": "high" },
+
+    "parent:communicate":         { "label": "Communicate with parents",    "module": "parents", "riskLevel": "low" },
+    "parent:conference":          { "label": "Hold parent conferences",     "module": "parents", "riskLevel": "medium" },
+
+    "staff:manage":               { "label": "Manage staff",                "module": "hr", "riskLevel": "critical" },
+    "staff:evaluate":             { "label": "Evaluate staff",              "module": "hr", "riskLevel": "high" },
+    "staff:assign":               { "label": "Assign staff",                "module": "hr", "riskLevel": "high" },
+    "staff:train":                { "label": "Train staff",                 "module": "hr", "riskLevel": "medium" },
+    "staff:salary:view":          { "label": "View staff salaries",         "module": "hr", "riskLevel": "high" },
+    "staff:record:manage":        { "label": "Manage staff records",        "module": "hr", "riskLevel": "high" },
+    "staff:record:view":          { "label": "View staff records",          "module": "hr", "riskLevel": "medium" },
+    "hr:manage":                  { "label": "Manage HR",                   "module": "hr", "riskLevel": "critical" },
+    "recruitment:manage":         { "label": "Manage recruitment",          "module": "hr", "riskLevel": "high" },
+    "onboarding:manage":          { "label": "Manage onboarding",           "module": "hr", "riskLevel": "medium" },
+    "contract:manage":            { "label": "Manage contracts",            "module": "hr", "riskLevel": "high" },
+    "cpd:manage":                 { "label": "Manage CPD",                  "module": "hr", "riskLevel": "medium" },
+    "training:organize":          { "label": "Organize training",           "module": "hr", "riskLevel": "medium" },
+    "certification:track":        { "label": "Track certifications",        "module": "hr", "riskLevel": "medium" },
+    "compliance:manage":          { "label": "Manage compliance",           "module": "hr", "riskLevel": "high" },
+    "audit:manage":               { "label": "Manage audits",               "module": "hr", "riskLevel": "high" },
+    "license:track":              { "label": "Track licenses",              "module": "hr", "riskLevel": "medium" },
+    "policy:enforce":             { "label": "Enforce policy",              "module": "hr", "riskLevel": "medium" },
+
+    "budget:manage":              { "label": "Manage budget",               "module": "finance", "riskLevel": "critical" },
+    "budget:approve":             { "label": "Approve budget",              "module": "finance", "riskLevel": "critical" },
+    "budget:view":                { "label": "View budget",                 "module": "finance", "riskLevel": "medium" },
+    "budget:request":             { "label": "Request budget",              "module": "finance", "riskLevel": "low" },
+    "payroll:manage":             { "label": "Manage payroll",              "module": "finance", "riskLevel": "critical" },
+    "payroll:approve":            { "label": "Approve payroll",             "module": "finance", "riskLevel": "critical" },
+    "payroll:view":               { "label": "View payroll",                "module": "finance", "riskLevel": "high" },
+    "expense:approve":            { "label": "Approve expenses",            "module": "finance", "riskLevel": "high" },
+    "invoice:manage":             { "label": "Manage invoices",             "module": "finance", "riskLevel": "medium" },
+    "invoice:create":             { "label": "Create invoices",             "module": "finance", "riskLevel": "medium" },
+    "invoice:read":               { "label": "Read invoices",               "module": "finance", "riskLevel": "low" },
+    "payment:receive":            { "label": "Receive payments",            "module": "finance", "riskLevel": "medium" },
+    "fee:manage":                 { "label": "Manage fees",                 "module": "finance", "riskLevel": "high" },
+    "fee_waiver:approve":         { "label": "Approve fee waivers",         "module": "finance", "riskLevel": "high" },
+    "scholarship:manage":         { "label": "Manage scholarships",         "module": "finance", "riskLevel": "high" },
+    "donor:manage":               { "label": "Manage donors",               "module": "finance", "riskLevel": "high" },
+    "grant:manage":               { "label": "Manage grants",               "module": "finance", "riskLevel": "high" },
+    "ledger:manage":              { "label": "Manage ledger",               "module": "finance", "riskLevel": "high" },
+    "reconciliation:manage":      { "label": "Manage reconciliations",      "module": "finance", "riskLevel": "high" },
+    "financial_report:view":      { "label": "View financial reports",      "module": "finance", "riskLevel": "medium" },
+    "financial_report:approve":   { "label": "Approve financial reports",   "module": "finance", "riskLevel": "critical" },
+    "purchase_order:manage":      { "label": "Manage purchase orders",      "module": "finance", "riskLevel": "medium" },
+    "vendor:manage":              { "label": "Manage vendors",              "module": "finance", "riskLevel": "high" },
+    "tender:manage":              { "label": "Manage tenders",              "module": "finance", "riskLevel": "high" },
+    "tax:file":                   { "label": "File taxes",                  "module": "finance", "riskLevel": "critical" },
+
+    "facilities:manage":          { "label": "Manage facilities",           "module": "operations", "riskLevel": "high" },
+    "maintenance:manage":         { "label": "Manage maintenance",          "module": "operations", "riskLevel": "medium" },
+    "work_order:assign":          { "label": "Assign work orders",          "module": "operations", "riskLevel": "medium" },
+    "inventory:manage":           { "label": "Manage inventory",            "module": "operations", "riskLevel": "medium" },
+    "transport:manage":           { "label": "Manage transport",            "module": "operations", "riskLevel": "high" },
+    "transport_sport:manage":     { "label": "Manage sport transport",      "module": "operations", "riskLevel": "medium" },
+    "route:manage":               { "label": "Manage routes",               "module": "operations", "riskLevel": "medium" },
+    "driver:manage":              { "label": "Manage drivers",              "module": "operations", "riskLevel": "medium" },
+    "transport_safety:manage":    { "label": "Manage transport safety",     "module": "operations", "riskLevel": "high" },
+    "security:manage":            { "label": "Manage security",             "module": "operations", "riskLevel": "high" },
+    "access_control:manage":      { "label": "Manage access control",       "module": "operations", "riskLevel": "high" },
+    "incident:manage":            { "label": "Manage incidents",            "module": "operations", "riskLevel": "medium" },
+    "incident:create":            { "label": "Create incidents",            "module": "operations", "riskLevel": "low" },
+    "emergency:execute":          { "label": "Execute emergency plan",      "module": "operations", "riskLevel": "critical" },
+    "drill:manage":               { "label": "Manage safety drills",        "module": "operations", "riskLevel": "medium" },
+    "it:manage":                  { "label": "Manage IT",                   "module": "it", "riskLevel": "critical" },
+    "system:admin":               { "label": "System administration",       "module": "it", "riskLevel": "critical" },
+    "network:manage":             { "label": "Manage network",              "module": "it", "riskLevel": "high" },
+    "network:read":               { "label": "Read network status",         "module": "it", "riskLevel": "low" },
+    "integration:manage":         { "label": "Manage integrations",         "module": "it", "riskLevel": "high" },
+    "user:manage":                { "label": "Manage users",                "module": "it", "riskLevel": "critical" },
+    "it_ticket:manage":           { "label": "Manage IT tickets",           "module": "it", "riskLevel": "low" },
+    "device:manage":              { "label": "Manage devices",              "module": "it", "riskLevel": "medium" },
+    "account:reset":              { "label": "Reset accounts",              "module": "it", "riskLevel": "high" },
+    "privacy:manage":             { "label": "Manage privacy",              "module": "it", "riskLevel": "critical" },
+    "data_request:manage":        { "label": "Manage data requests",        "module": "it", "riskLevel": "high" },
+    "breach:manage":              { "label": "Manage data breaches",        "module": "it", "riskLevel": "critical" },
+    "confidential:access":        { "label": "Access confidential data",    "module": "it", "riskLevel": "critical" },
+
+    "sport:manage":               { "label": "Manage sports",               "module": "sports", "riskLevel": "high" },
+    "coach:manage":               { "label": "Manage coaches",              "module": "sports", "riskLevel": "high" },
+    "sport_budget:manage":        { "label": "Manage sport budget",         "module": "sports", "riskLevel": "high" },
+    "sport_facility:manage":      { "label": "Manage sport facilities",     "module": "sports", "riskLevel": "high" },
+    "sport_schedule:manage":      { "label": "Manage sport schedule",       "module": "sports", "riskLevel": "medium" },
+    "team:manage":                { "label": "Manage teams",                "module": "sports", "riskLevel": "medium" },
+    "roster:manage":              { "label": "Manage rosters",              "module": "sports", "riskLevel": "medium" },
+    "roster:view":                { "label": "View rosters",                "module": "sports", "riskLevel": "low" },
+    "training:manage":            { "label": "Manage training",             "module": "sports", "riskLevel": "medium" },
+    "training:assist":            { "label": "Assist training",             "module": "sports", "riskLevel": "low" },
+    "attendance:mark":            { "label": "Mark attendance",             "module": "sports", "riskLevel": "low" },
+    "student:athlete:view":       { "label": "View athlete info",           "module": "sports", "riskLevel": "medium" },
+    "equipment:manage":           { "label": "Manage equipment",            "module": "sports", "riskLevel": "medium" },
+    "equipment:issue":            { "label": "Issue equipment",             "module": "sports", "riskLevel": "low" },
+    "pe_curriculum:manage":       { "label": "Manage PE curriculum",        "module": "sports", "riskLevel": "medium" },
+    "fitness_test:manage":        { "label": "Manage fitness tests",        "module": "sports", "riskLevel": "medium" },
+    "sport_event:manage":         { "label": "Manage sport events",         "module": "sports", "riskLevel": "medium" },
+    "athlete:health:view":        { "label": "View athlete health",         "module": "sports", "riskLevel": "high" },
+    "injury:record:manage":       { "label": "Manage injury records",       "module": "sports", "riskLevel": "high" },
+    "rehab:plan:manage":          { "label": "Manage rehab plans",          "module": "sports", "riskLevel": "medium" },
+
+    "club:manage":                { "label": "Manage clubs",                "module": "clubs", "riskLevel": "medium" },
+    "club_budget:manage":         { "label": "Manage club budgets",         "module": "clubs", "riskLevel": "high" },
+    "club_budget:request":        { "label": "Request club budget",         "module": "clubs", "riskLevel": "low" },
+    "club_advisor:assign":        { "label": "Assign club advisors",        "module": "clubs", "riskLevel": "medium" },
+    "club:roster:manage":         { "label": "Manage club rosters",         "module": "clubs", "riskLevel": "medium" },
+    "event:manage":               { "label": "Manage events",               "module": "clubs", "riskLevel": "medium" },
+    "event:request":              { "label": "Request events",              "module": "clubs", "riskLevel": "low" },
+    "music_program:manage":       { "label": "Manage music program",        "module": "clubs", "riskLevel": "medium" },
+    "instrument:manage":          { "label": "Manage instruments",          "module": "clubs", "riskLevel": "medium" },
+    "performance:manage":         { "label": "Manage performances",         "module": "clubs", "riskLevel": "medium" },
+    "music_budget:manage":        { "label": "Manage music budget",         "module": "clubs", "riskLevel": "high" },
+    "theatre:manage":             { "label": "Manage theatre",              "module": "clubs", "riskLevel": "medium" },
+    "production:manage":          { "label": "Manage productions",          "module": "clubs", "riskLevel": "medium" },
+    "theatre_budget:manage":      { "label": "Manage theatre budget",       "module": "clubs", "riskLevel": "high" },
+    "stem:manage":                { "label": "Manage STEM programs",        "module": "clubs", "riskLevel": "medium" },
+    "robotics:manage":            { "label": "Manage robotics",             "module": "clubs", "riskLevel": "medium" },
+    "stem_budget:manage":         { "label": "Manage STEM budget",          "module": "clubs", "riskLevel": "high" },
+    "student:council:oversee":    { "label": "Oversee student council",     "module": "clubs", "riskLevel": "medium" },
+
+    "dorm:manage":                { "label": "Manage dormitory",            "module": "dorms", "riskLevel": "high" },
+    "dorm:read":                  { "label": "Read dorm info",              "module": "dorms", "riskLevel": "low" },
+    "dorm_staff:manage":          { "label": "Manage dorm staff",           "module": "dorms", "riskLevel": "high" },
+    "dorm_budget:manage":         { "label": "Manage dorm budget",          "module": "dorms", "riskLevel": "high" },
+    "dorm_discipline:manage":     { "label": "Manage dorm discipline",      "module": "dorms", "riskLevel": "high" },
+    "dorm_discipline:create":     { "label": "Create dorm discipline",      "module": "dorms", "riskLevel": "medium" },
+    "dorm_attendance:manage":     { "label": "Manage dorm attendance",      "module": "dorms", "riskLevel": "medium" },
+    "dorm_supplies:manage":       { "label": "Manage dorm supplies",        "module": "dorms", "riskLevel": "medium" },
+    "dorm_hygiene:manage":        { "label": "Manage dorm hygiene",         "module": "dorms", "riskLevel": "medium" },
+    "dorm_emergency:execute":     { "label": "Execute dorm emergency",      "module": "dorms", "riskLevel": "critical" },
+
+    "admission:manage":           { "label": "Manage admissions",           "module": "admissions", "riskLevel": "high" },
+    "application:manage":         { "label": "Manage applications",         "module": "admissions", "riskLevel": "medium" },
+    "communication:manage":       { "label": "Manage communications",       "module": "marketing", "riskLevel": "medium" },
+    "website:manage":             { "label": "Manage website",              "module": "marketing", "riskLevel": "medium" },
+    "social:manage":              { "label": "Manage social media",         "module": "marketing", "riskLevel": "medium" },
+    "press:manage":               { "label": "Manage press",                "module": "marketing", "riskLevel": "medium" },
+    "campaign:manage":            { "label": "Manage campaigns",            "module": "marketing", "riskLevel": "medium" },
+    "alumni:manage":              { "label": "Manage alumni",               "module": "marketing", "riskLevel": "medium" },
+
+    "safeguard:manage":           { "label": "Manage safeguarding",         "module": "safeguarding", "riskLevel": "critical" },
+    "authority:report":           { "label": "Report to authorities",       "module": "safeguarding", "riskLevel": "critical" },
+
+    "library:manage":             { "label": "Manage library",              "module": "library", "riskLevel": "medium" },
+    "resource:acquire":           { "label": "Acquire resources",           "module": "library", "riskLevel": "medium" },
+    "student:loan:manage":        { "label": "Manage student loans",        "module": "library", "riskLevel": "low" },
+
+    "medical_record:manage":      { "label": "Manage medical records",      "module": "health", "riskLevel": "high" },
+    "immunization:manage":        { "label": "Manage immunizations",        "module": "health", "riskLevel": "medium" },
+
+    "catering:manage":            { "label": "Manage catering",             "module": "support", "riskLevel": "medium" },
+    "food_safety:manage":         { "label": "Manage food safety",          "module": "support", "riskLevel": "high" },
+    "student:meal:view":          { "label": "View student meals",          "module": "support", "riskLevel": "low" },
+    "uniform:manage":             { "label": "Manage uniforms",             "module": "support", "riskLevel": "medium" },
+    "store:manage":               { "label": "Manage school store",         "module": "support", "riskLevel": "medium" }
+  },
+
+  "departments": {
+    "sports": {
+      "label": "Sports & Physical Education",
+      "scopes": ["football","basketball","volleyball","athletics","swimming","tennis","rugby","hockey","cricket","badminton"]
+    },
+    "clubs": {
+      "label": "Clubs & Co-Curricular",
+      "scopes": ["debate","robotics","stem","drama","music","band","choir","art","literature","environment","mun","journalism","chess"]
+    },
+    "academics": {
+      "label": "Academic Departments",
+      "scopes": ["mathematics","science","languages","humanities","arts","business","technology","physical_education"]
+    },
+    "dorms": {
+      "label": "Dormitories / Boarding Houses",
+      "scopes": ["boys_house_a","boys_house_b","girls_house_a","girls_house_b","junior_house","senior_house"]
+    },
+    "finance": { "label": "Finance & Business Office", "scopes": [] },
+    "operations": { "label": "Operations & Facilities", "scopes": [] },
+    "it": { "label": "Information Technology", "scopes": [] },
+    "hr": { "label": "Human Resources", "scopes": [] }
+  },
+
+  "positions": {
+    "principal": {
+      "label": "Principal",
+      "department": "leadership",
+      "seniority": 1,
+      "permissions": { "all": true }
+    },
+    "vice_principal": {
+      "label": "Vice Principal / Deputy Principal",
+      "department": "leadership",
+      "seniority": 2,
+      "permissions": {
+        "staff:manage": true,
+        "student:override": true,
+        "budget:view": true,
+        "curriculum:approve": true,
+        "emergency:execute": true,
+        "report:generate": true
+      }
+    },
+    "assistant_principal_academics": {
+      "label": "Assistant Principal (Academics)",
+      "department": "leadership",
+      "seniority": 3,
+      "permissions": {
+        "curriculum:manage": true,
+        "assessment:approve": true,
+        "staff:evaluate": true,
+        "schedule:manage": true,
+        "report:generate": true
+      }
+    },
+    "assistant_principal_operations": {
+      "label": "Assistant Principal (Operations)",
+      "department": "leadership",
+      "seniority": 3,
+      "permissions": {
+        "facilities:manage": true,
+        "transport:manage": true,
+        "security:manage": true,
+        "inventory:manage": true,
+        "emergency:execute": true
+      }
+    },
+    "assistant_principal_student_affairs": {
+      "label": "Assistant Principal (Student Affairs)",
+      "department": "leadership",
+      "seniority": 3,
+      "permissions": {
+        "student:discipline": true,
+        "student:attendance": true,
+        "club:manage": true,
+        "sport:manage": true,
+        "parent:conference": true
+      }
+    },
+
+    "business_manager": {
+      "label": "Business Manager / Bursar",
+      "department": "finance",
+      "seniority": 2,
+      "permissions": {
+        "budget:manage": true,
+        "payroll:manage": true,
+        "vendor:manage": true,
+        "expense:approve": true,
+        "invoice:manage": true,
+        "financial_report:view": true
+      }
+    },
+    "finance_director": {
+      "label": "Finance Director / CFO",
+      "department": "finance",
+      "seniority": 1,
+      "permissions": {
+        "budget:approve": true,
+        "audit:manage": true,
+        "grant:manage": true,
+        "financial_report:approve": true,
+        "payroll:approve": true,
+        "tax:file": true
+      }
+    },
+    "accountant": {
+      "label": "Accountant",
+      "department": "finance",
+      "seniority": 3,
+      "permissions": {
+        "ledger:manage": true,
+        "reconciliation:manage": true,
+        "financial_report:view": true,
+        "invoice:read": true
+      }
+    },
+    "accounts_receivable": {
+      "label": "Accounts Receivable Clerk",
+      "department": "finance",
+      "seniority": 4,
+      "permissions": {
+        "fee:manage": true,
+        "invoice:create": true,
+        "payment:receive": true,
+        "student:fee:view": true
+      }
+    },
+    "payroll_officer": {
+      "label": "Payroll Officer",
+      "department": "finance",
+      "seniority": 3,
+      "permissions": {
+        "payroll:manage": true,
+        "staff:salary:view": true,
+        "tax:file": true
+      }
+    },
+    "procurement_officer": {
+      "label": "Procurement Officer",
+      "department": "finance",
+      "seniority": 3,
+      "permissions": {
+        "purchase_order:manage": true,
+        "vendor:manage": true,
+        "tender:manage": true,
+        "inventory:read": true
+      }
+    },
+    "scholarship_officer": {
+      "label": "Scholarship / Financial Aid Officer",
+      "department": "finance",
+      "seniority": 3,
+      "permissions": {
+        "scholarship:manage": true,
+        "fee_waiver:approve": true,
+        "student:fee:view": true,
+        "donor:manage": true
+      }
+    },
+
+    "academic_dean": {
+      "label": "Academic Dean / Head of Academics",
+      "department": "academics",
+      "seniority": 2,
+      "permissions": {
+        "curriculum:manage": true,
+        "staff:evaluate": true,
+        "assessment:approve": true,
+        "timetable:approve": true,
+        "academic_report:approve": true
+      }
+    },
+    "hod": {
+      "label": "Head of Department",
+      "department": "academics",
+      "seniority": 3,
+      "scopeRequired": true,
+      "permissions": {
+        "subject:manage": true,
+        "staff:evaluate": true,
+        "curriculum:edit": true,
+        "exam:approve": true
+      }
+    },
+    "registrar": {
+      "label": "School Registrar",
+      "department": "academics",
+      "seniority": 3,
+      "permissions": {
+        "student:enroll": true,
+        "student:record:edit": true,
+        "transcript:manage": true,
+        "grade:input": true,
+        "report:generate": true
+      }
+    },
+    "examinations_officer": {
+      "label": "Examinations Officer",
+      "department": "academics",
+      "seniority": 3,
+      "permissions": {
+        "exam:manage": true,
+        "exam_schedule:manage": true,
+        "grade:publish": true,
+        "student:record:view": true
+      }
+    },
+    "curriculum_coordinator": {
+      "label": "Curriculum Coordinator",
+      "department": "academics",
+      "seniority": 3,
+      "permissions": {
+        "curriculum:manage": true,
+        "textbook:approve": true,
+        "syllabus:manage": true,
+        "staff:train": true
+      }
+    },
+    "sen_coordinator": {
+      "label": "Special Education Coordinator (SEN)",
+      "department": "academics",
+      "seniority": 3,
+      "permissions": {
+        "iep:manage": true,
+        "accommodation:manage": true,
+        "student:record:view": true,
+        "staff:assign": true,
+        "parent:communicate": true
+      }
+    },
+    "librarian": {
+      "label": "Librarian / Library Administrator",
+      "department": "library",
+      "seniority": 3,
+      "permissions": {
+        "library:manage": true,
+        "resource:acquire": true,
+        "inventory:manage": true,
+        "student:loan:manage": true
+      }
+    },
+
+    "dean_of_students": {
+      "label": "Dean of Students",
+      "department": "student_affairs",
+      "seniority": 3,
+      "permissions": {
+        "student:discipline": true,
+        "student:attendance": true,
+        "parent:conference": true,
+        "student:record:view": true
+      }
+    },
+    "school_counselor": {
+      "label": "School Counselor",
+      "department": "student_affairs",
+      "seniority": 3,
+      "permissions": {
+        "student:record:view": true,
+        "counseling:note:edit": true,
+        "parent:communicate": true,
+        "referral:create": true
+      }
+    },
+    "career_counselor": {
+      "label": "Career / College Counselor",
+      "department": "student_affairs",
+      "seniority": 3,
+      "permissions": {
+        "career:advise": true,
+        "college_app:manage": true,
+        "student:record:view": true,
+        "recommendation:write": true
+      }
+    },
+    "school_nurse": {
+      "label": "School Nurse / Health Officer",
+      "department": "health",
+      "seniority": 3,
+      "permissions": {
+        "medical_record:manage": true,
+        "student:health:view": true,
+        "immunization:manage": true,
+        "emergency:execute": true
+      }
+    },
+    "attendance_officer": {
+      "label": "Attendance Officer",
+      "department": "student_affairs",
+      "seniority": 4,
+      "permissions": {
+        "student:attendance": true,
+        "parent:communicate": true,
+        "student:record:view": true,
+        "report:generate": true
+      }
+    },
+    "safeguarding_officer": {
+      "label": "Child Protection / Safeguarding Officer",
+      "department": "safeguarding",
+      "seniority": 2,
+      "permissions": {
+        "safeguard:manage": true,
+        "incident:create": true,
+        "student:record:view": true,
+        "authority:report": true,
+        "confidential:access": true
+      }
+    },
+    "student_activities_coordinator": {
+      "label": "Student Activities Coordinator",
+      "department": "student_affairs",
+      "seniority": 4,
+      "permissions": {
+        "event:manage": true,
+        "club:manage": true,
+        "student:council:oversee": true,
+        "budget:request": true
+      }
+    },
+
+    "athletic_director": {
+      "label": "Athletic Director / Sports Director",
+      "department": "sports",
+      "seniority": 2,
+      "permissions": {
+        "sport:manage": true,
+        "coach:manage": true,
+        "sport_budget:manage": true,
+        "sport_facility:manage": true,
+        "event:manage": true
+      }
+    },
+    "assistant_athletic_director": {
+      "label": "Assistant Athletic Director",
+      "department": "sports",
+      "seniority": 3,
+      "permissions": {
+        "sport_schedule:manage": true,
+        "transport_sport:manage": true,
+        "equipment:manage": true,
+        "roster:manage": true
+      }
+    },
+    "head_coach": {
+      "label": "Head Coach",
+      "department": "sports",
+      "seniority": 3,
+      "scopeRequired": true,
+      "permissions": {
+        "team:manage": true,
+        "roster:manage": true,
+        "training:manage": true,
+        "student:athlete:view": true
+      }
+    },
+    "assistant_coach": {
+      "label": "Assistant Coach",
+      "department": "sports",
+      "seniority": 4,
+      "scopeRequired": true,
+      "permissions": {
+        "roster:view": true,
+        "training:assist": true,
+        "attendance:mark": true
+      }
+    },
+    "equipment_manager": {
+      "label": "Sports Equipment Manager",
+      "department": "sports",
+      "seniority": 4,
+      "permissions": {
+        "equipment:manage": true,
+        "inventory:manage": true,
+        "equipment:issue": true
+      }
+    },
+    "pe_coordinator": {
+      "label": "PE Coordinator",
+      "department": "sports",
+      "seniority": 3,
+      "permissions": {
+        "pe_curriculum:manage": true,
+        "fitness_test:manage": true,
+        "sport_event:manage": true
+      }
+    },
+    "sports_trainer": {
+      "label": "Sports Physio / Trainer",
+      "department": "sports",
+      "seniority": 3,
+      "permissions": {
+        "athlete:health:view": true,
+        "injury:record:manage": true,
+        "rehab:plan:manage": true
+      }
+    },
+
+    "clubs_coordinator": {
+      "label": "Co-Curricular / Clubs Coordinator",
+      "department": "clubs",
+      "seniority": 3,
+      "permissions": {
+        "club:manage": true,
+        "club_budget:manage": true,
+        "club_advisor:assign": true,
+        "event:manage": true
+      }
+    },
+    "club_advisor": {
+      "label": "Club Advisor",
+      "department": "clubs",
+      "seniority": 4,
+      "scopeRequired": true,
+      "permissions": {
+        "club:manage": true,
+        "club:roster:manage": true,
+        "club_budget:request": true,
+        "event:request": true
+      }
+    },
+    "debate_coordinator": {
+      "label": "Debate / Model UN Coordinator",
+      "department": "clubs",
+      "seniority": 4,
+      "permissions": {
+        "club:manage": true,
+        "event:manage": true,
+        "club_budget:request": true
+      }
+    },
+    "band_director": {
+      "label": "Music / Band Director",
+      "department": "clubs",
+      "seniority": 3,
+      "permissions": {
+        "music_program:manage": true,
+        "instrument:manage": true,
+        "performance:manage": true,
+        "music_budget:manage": true
+      }
+    },
+    "theatre_director": {
+      "label": "Drama / Theatre Director",
+      "department": "clubs",
+      "seniority": 3,
+      "permissions": {
+        "theatre:manage": true,
+        "production:manage": true,
+        "theatre_budget:manage": true
+      }
+    },
+    "stem_coordinator": {
+      "label": "STEM / Robotics Coordinator",
+      "department": "clubs",
+      "seniority": 3,
+      "permissions": {
+        "stem:manage": true,
+        "robotics:manage": true,
+        "event:manage": true,
+        "stem_budget:manage": true
+      }
+    },
+
+    "director_of_boarding": {
+      "label": "Director of Boarding / Housemaster",
+      "department": "dorms",
+      "seniority": 2,
+      "permissions": {
+        "dorm:manage": true,
+        "dorm_staff:manage": true,
+        "dorm_budget:manage": true,
+        "dorm_discipline:manage": true,
+        "student:record:view": true
+      }
+    },
+    "assistant_housemaster": {
+      "label": "Assistant Housemaster",
+      "department": "dorms",
+      "seniority": 3,
+      "permissions": {
+        "dorm:read": true,
+        "dorm_discipline:create": true,
+        "dorm_attendance:manage": true,
+        "student:record:view": true
+      }
+    },
+    "house_parent": {
+      "label": "House Parent / Dorm Parent",
+      "department": "dorms",
+      "seniority": 4,
+      "permissions": {
+        "dorm:read": true,
+        "dorm_attendance:manage": true,
+        "student:health:view": true,
+        "parent:communicate": true
+      }
+    },
+    "dorm_matron": {
+      "label": "Dorm Matron / Warden",
+      "department": "dorms",
+      "seniority": 4,
+      "permissions": {
+        "dorm:read": true,
+        "dorm_supplies:manage": true,
+        "dorm_hygiene:manage": true,
+        "student:health:view": true
+      }
+    },
+    "dorm_discipline_officer": {
+      "label": "Dorm Discipline Officer",
+      "department": "dorms",
+      "seniority": 4,
+      "permissions": {
+        "dorm_discipline:manage": true,
+        "dorm:read": true,
+        "student:record:view": true,
+        "parent:communicate": true
+      }
+    },
+    "night_duty_officer": {
+      "label": "Night Duty Officer",
+      "department": "dorms",
+      "seniority": 4,
+      "permissions": {
+        "dorm:read": true,
+        "dorm_emergency:execute": true,
+        "student:attendance": true
+      }
+    },
+
+    "hr_manager": {
+      "label": "HR Manager",
+      "department": "hr",
+      "seniority": 2,
+      "permissions": {
+        "hr:manage": true,
+        "staff:record:manage": true,
+        "recruitment:manage": true,
+        "contract:manage": true,
+        "payroll:view": true
+      }
+    },
+    "hr_officer": {
+      "label": "HR Officer / Recruiter",
+      "department": "hr",
+      "seniority": 4,
+      "permissions": {
+        "recruitment:manage": true,
+        "onboarding:manage": true,
+        "staff:record:view": true
+      }
+    },
+    "cpd_coordinator": {
+      "label": "Staff Training Coordinator (CPD)",
+      "department": "hr",
+      "seniority": 3,
+      "permissions": {
+        "cpd:manage": true,
+        "training:organize": true,
+        "staff:record:view": true,
+        "certification:track": true
+      }
+    },
+    "compliance_officer": {
+      "label": "Compliance Officer",
+      "department": "hr",
+      "seniority": 3,
+      "permissions": {
+        "compliance:manage": true,
+        "audit:manage": true,
+        "license:track": true,
+        "policy:enforce": true
+      }
+    },
+
+    "facilities_manager": {
+      "label": "Facilities Manager",
+      "department": "operations",
+      "seniority": 3,
+      "permissions": {
+        "facilities:manage": true,
+        "maintenance:manage": true,
+        "vendor:manage": true,
+        "inventory:manage": true
+      }
+    },
+    "maintenance_supervisor": {
+      "label": "Maintenance Supervisor",
+      "department": "operations",
+      "seniority": 4,
+      "permissions": {
+        "maintenance:manage": true,
+        "work_order:assign": true,
+        "inventory:manage": true
+      }
+    },
+    "transport_manager": {
+      "label": "Transport / Buses Manager",
+      "department": "operations",
+      "seniority": 3,
+      "permissions": {
+        "transport:manage": true,
+        "route:manage": true,
+        "driver:manage": true,
+        "transport_safety:manage": true
+      }
+    },
+    "security_officer": {
+      "label": "Security / Safety Officer",
+      "department": "operations",
+      "seniority": 3,
+      "permissions": {
+        "security:manage": true,
+        "access_control:manage": true,
+        "incident:manage": true,
+        "emergency:execute": true,
+        "drill:manage": true
+      }
+    },
+    "it_manager": {
+      "label": "IT Manager / CTO",
+      "department": "it",
+      "seniority": 2,
+      "permissions": {
+        "it:manage": true,
+        "system:admin": true,
+        "network:manage": true,
+        "integration:manage": true,
+        "user:manage": true
+      }
+    },
+    "it_support_officer": {
+      "label": "IT Support Officer",
+      "department": "it",
+      "seniority": 4,
+      "permissions": {
+        "it_ticket:manage": true,
+        "device:manage": true,
+        "account:reset": true,
+        "network:read": true
+      }
+    },
+    "dpo": {
+      "label": "Data Protection Officer (DPO)",
+      "department": "it",
+      "seniority": 2,
+      "permissions": {
+        "privacy:manage": true,
+        "data_request:manage": true,
+        "breach:manage": true,
+        "policy:enforce": true,
+        "audit:manage": true
+      }
+    },
+
+    "communications_manager": {
+      "label": "Communications / Marketing Manager",
+      "department": "marketing",
+      "seniority": 3,
+      "permissions": {
+        "communication:manage": true,
+        "website:manage": true,
+        "social:manage": true,
+        "press:manage": true
+      }
+    },
+    "admissions_officer": {
+      "label": "Admissions Officer",
+      "department": "admissions",
+      "seniority": 3,
+      "permissions": {
+        "admission:manage": true,
+        "application:manage": true,
+        "student:enroll": true,
+        "parent:communicate": true
+      }
+    },
+    "development_officer": {
+      "label": "Development / Fundraising Officer",
+      "department": "marketing",
+      "seniority": 3,
+      "permissions": {
+        "donor:manage": true,
+        "campaign:manage": true,
+        "alumni:manage": true,
+        "financial_report:view": true
+      }
+    },
+    "alumni_relations_officer": {
+      "label": "Alumni Relations Officer",
+      "department": "marketing",
+      "seniority": 4,
+      "permissions": {
+        "alumni:manage": true,
+        "event:manage": true,
+        "communication:manage": true
+      }
+    },
+
+    "catering_manager": {
+      "label": "Head of Catering / Cafeteria Manager",
+      "department": "support",
+      "seniority": 4,
+      "permissions": {
+        "catering:manage": true,
+        "vendor:manage": true,
+        "food_safety:manage": true,
+        "student:meal:view": true
+      }
+    },
+    "uniform_shop_manager": {
+      "label": "Uniform Shop Manager",
+      "department": "support",
+      "seniority": 4,
+      "permissions": {
+        "uniform:manage": true,
+        "inventory:manage": true,
+        "payment:receive": true
+      }
+    },
+    "school_store_manager": {
+      "label": "School Store Manager",
+      "department": "support",
+      "seniority": 4,
+      "permissions": {
+        "store:manage": true,
+        "inventory:manage": true,
+        "payment:receive": true
+      }
+    }
+  }
+}
