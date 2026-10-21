@@ -53,6 +53,17 @@ Teachers.belongsTo(Users, {
   onDelete: 'CASCADE',
 });
 
+Admins.hasMany(Admins, {
+  foreignKey: 'user_id',
+  as: 'adminProfile',
+  onDelete: 'CASCADE',
+});
+Admins.belongsTo(Users, {
+  foreignKey: 'user_id',
+  as: 'user',
+  onDelete: 'CASCADE',
+});
+
 Users.hasMany(Parents, {
   foreignKey: 'user_id',
   as: 'parentProfile',
