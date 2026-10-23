@@ -1,466 +1,485 @@
-# Sherehe System Documentation
+# Paideia — School Management System
 
-## Overview
+## Project Documentation
 
-Sherehe is an event management system that handles event creation, ticket sales, attendee management, payment processing, and ticket scanning. The system integrates with RabbitMQ for event-driven communication and payment processing.
-
----
-
-## System Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                           SHEREHE SYSTEM                            │
-├─────────────┬─────────────┬─────────────┬───────────────────────────┤
-│   Events    │   Tickets   │  Attendees  │      Scanners             │
-├─────────────┼─────────────┼─────────────┼───────────────────────────┤
-│   Payments  │  Invites    │Institutions │     Transactions          │
-└─────────────┴─────────────┴─────────────┴───────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                        RABBITMQ EXCHANGES                           │
-├─────────────────────┬─────────────────────┬─────────────────────────┤
-│ verisafe.events.    │ io.opencrafts.      │ io.opencrafts.          │
-│ topic               │ veribroke           │ veribroke-notifications │
-└─────────────────────┴─────────────────────┴─────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                         EXTERNAL SERVICES                           │
-├─────────────────────────┬───────────────────────────────────────────┤
-│   Verisafe (User Mgmt)  │   Veribroke (Payment Gateway)             │
-└─────────────────────────┴───────────────────────────────────────────┘
-```
+**Version:** 0.2.0
+**Last Updated:** October 2026
+**Status:** In Development
 
 ---
 
-## Database Models
+## 1. Executive Summary
 
-### 1. User Model (`users`)
+**Paideia** is a comprehensive, role-based school management system designed for high schools. It centralizes student records, staff management, parent communication, academic operations, and administrative workflows into a single, secure platform.
 
-Manages system users.
+The system is built on a **role-driven architecture** where every user — student, teacher, parent, or admin — sees only the data and actions relevant to their role, enforced through a granular permission system.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Primary key |
-| `username` | STRING | Unique username |
-| `email` | STRING | Unique email |
-| `name` | STRING | User's full name |
-| `phone` | STRING | Phone number |
+### Core Objectives
 
-**Features:** Paranoid (soft delete), timestamps hidden by default
+1. **Unify school operations** — replace fragmented spreadsheets, paper forms, and disconnected tools with one system.
+2. **Enforce role-based access control (RBAC)** — every action is gated by an explicit permission, not by hardcoded route checks.
+3. **Support the full academic lifecycle** — from admission through graduation, including academics, finance, boarding, sports, clubs, and staff management.
+4. **Enable parent engagement** — give parents visibility into their children's academic progress, attendance, fees, and school life.
+5. **Provide auditable, extensible administration** — every administrative action is traceable, and new roles can be added without code changes.
 
-### 2. Event Model (`events`)
+---
 
-Core event management.
+## 2. System Architecture
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Primary key |
-| `event_name` | STRING | Name of the event |
-| `event_description` | TEXT | Detailed description |
-| `event_location` | STRING | Venue/location |
-| `start_date` | DATE | Event start datetime |
-| `end_date` | DATE | Event end datetime |
-| `attendee_count` | INTEGER | Current attendee count |
-| `organizer_id` | UUID | User ID of organizer |
-| `event_card_image` | STRING | Card display image URL |
-| `event_poster_image` | STRING | Poster image URL |
-| `event_banner_image` | STRING | Banner image URL |
-| `scope` | ENUM | `public`, `institution`, `private` |
-| `event_genre` | JSONB | Event categories/tags |
+### 2.1 Technology Stack
 
-### 3. Ticket Model (`tickets`)
+| Layer | Technology | Purpose |
+|---|---|---|
+| **Runtime** | Node.js (ES Modules) | Server-side JavaScript execution |
+| **Framework** | Express.js | HTTP routing and middleware |
+| **Database** | PostgreSQL | Relational data storage |
+| **ORM** | Sequelize | Model definitions, associations, migrations |
+| **Migrations** | node-pg-migrate | Versioned schema changes |
+| **Authentication** | JWT (access + refresh tokens) | Stateless session management |
+| **Logging** | Pino + pino-http | Structured request/application logging |
+| **Environment** | dotenv | Configuration management |
+| **File Storage** | Local `uploads/` directory | Photos, documents |
 
-Manages ticket types for events.
+### 2.2 Project Structure
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Primary key |
-| `event_id` | UUID | Associated event |
-| `ticket_name` | STRING | Ticket type name (e.g., "VIP", "Early Bird") |
-| `ticket_price` | FLOAT | Price per ticket |
-| `ticket_for` | INTEGER | Number of people per ticket (default: 1) |
-| `ticket_quantity` | INTEGER | Total available quantity |
-| `start_date` | DATE | Sale start date |
-| `end_date` | DATE | Sale end date |
-| `scope` | ENUM | `public`, `institution`, `private` |
+```
+paideia/
+├── Config/
+│   ├── permissions.json          # Permission catalog + role presets
+│   └── permissions.js            # Loader + helpers
+├── Models/
+│   ├── Users.model.js
+│   ├── Students.model.js
+│   ├── Teachers.model.js
+│   ├── Parents.model.js
+│   ├── Admins.model.js
+│   ├── Parent_Student.model.js
+│   └── ... (academic, dorm, etc.)
+│   ├── index.js                  # Associations barrel
+├── Routes/
+│   ├── User.route.js
+│   ├── Student.route.js
+│   ├── Teacher.route.js
+│   ├── Parent.route.js
+│   └── Admin.route.js
+├── Repositories/
+│   └── ... (data access layer)
+├── Services/
+│   └── ... (business logic)
+├── Middleware/
+│   ├── authenticate.js
+│   ├── authorize.js
+│   └── errorHandler.js
+├── Utils/
+│   ├── db.js                     # Sequelize instance
+│   └── logger.js                 # Pino logger
+├── migrations/
+│   └── ... (node-pg-migrate files)
+├── uploads/                      # User-uploaded files
+├── app.js                        # Express entry point
+└── package.json
+```
 
-### 4. Attendee Model (`attendees`)
+---
 
-Records ticket purchases and attendee information.
+## 3. Data Model Overview
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Primary key |
-| `user_id` | UUID | Purchasing user |
-| `event_id` | UUID | Associated event |
-| `ticket_id` | UUID | Purchased ticket type |
-| `ticket_quantity` | INTEGER | Number of tickets purchased |
+The system is built around a central `Users` table, with **role-specific profile tables** linked one-to-one. This allows a single user identity to hold exactly one role profile, while keeping role-specific fields separate.
 
-**Note:** Each attendee record represents one seat/person. If `ticket_for = 2` and quantity = 3, 6 attendee records are created.
+### 3.1 Core Identity Model
 
-### 5. Transaction Model (`transactions`)
+```
+Users (user_id, email, password, first_name, last_name, phone, gender, role)
+  │
+  ├── 1:1 → Students  (studentProfile)
+  ├── 1:1 → Teachers  (teacherProfile)
+  ├── 1:1 → Parents   (parentProfile)
+  └── 1:1 → Admins    (adminProfile)
+```
 
-Tracks all payment transactions.
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Primary key |
-| `user_id` | UUID | User who paid |
-| `event_id` | UUID | Associated event |
-| `ticket_id` | UUID | Purchased ticket |
-| `ticket_quantity` | INTEGER | Quantity purchased |
-| `amount` | DECIMAL | Total amount paid |
-| `currency` | STRING | Default: 'KES' |
-| `payment_method` | ENUM | `MPESA`, `AIRTEL`, `CARD`, `BANK` |
-| `status` | ENUM | `PENDING`, `SUCCESS`, `FAILED`, `CANCELLED`, `REVERSED` |
-| `checkout_request_id` | STRING | MPESA CheckoutRequestID |
-| `merchant_request_id` | STRING | MPESA MerchantRequestID |
-| `transaction_reference` | STRING | Unique reference |
-| `phone_number` | STRING | Payer's phone number |
-| `provider_response` | JSON | Raw payment provider response |
-| `failure_reason` | STRING | Reason if failed |
-
-### 6. PaymentInfo Model (`payment_infos`)
-
-Stores payment configuration per event.
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Primary key |
-| `event_id` | UUID | Associated event (unique) |
-| `payment_type` | ENUM | `MPESA_PAYBILL`, `MPESA_TILL`, `MPESA_SEND_MONEY`, `POSHI_LA_BIASHARA` |
-| `paybill_number` | STRING | Paybill number |
-| `paybill_account_number` | STRING | Account number |
-| `till_number` | STRING | Till number |
-| `phone_number` | STRING | For send money |
-
-### 7. EventScanner Model (`event_scanners`)
-
-Manages ticket scanning permissions.
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Primary key |
-| `event_id` | UUID | Associated event |
-| `user_id` | UUID | Scanner user |
-| `role` | ENUM | `SCANNER`, `SUPERVISOR` |
-| `granted_by` | UUID | User who granted permission |
-
-### 8. ScannedTickets Model (`scanned_tickets`)
-
-Records ticket scan events for entry validation.
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Primary key |
-| `attendee_id` | UUID | Attendee being scanned |
-
-### 9. Invite Models
-
-#### EventInvite (`event_invites`)
-Invites for private events.
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Primary key |
-| `event_id` | UUID | Associated event |
-| `token` | STRING | Unique invite token |
-| `expires_at` | DATE | Expiration datetime |
-| `max_uses` | INTEGER | Maximum uses (default: 100) |
-| `used_count` | INTEGER | Current use count |
-
-#### TicketInvite (`ticket_invites`)
-Similar structure for restricted ticket access.
-
-### 10. Institution Models
-
-Manages institutional access control (e.g., university-only events).
+### 3.2 Key Entities
 
 | Model | Purpose |
-|-------|---------|
-| `event_institutions` | Links events to institutions |
-| `ticket_institutions` | Links tickets to institutions |
-| `user_institutions` | Links users to institutions |
+|---|---|
+| **Users** | Central identity — credentials, contact info, role |
+| **Students** | Student-specific fields: DOB, nationality, grade, enrollment, medical notes |
+| **Teachers** | Teacher-specific fields: employee ID, qualification, employment type, dates |
+| **Parents** | Parent-specific fields: relationship, alternate contact, occupation |
+| **Admins** | Admin-specific fields: position, permissions (JSONB), office, qualification |
+| **ParentStudent** | M:N join linking parents to their children |
+| **AcademicYears / Terms** | Academic calendar structure |
+| **ClassLevels / ClassStreams / ClassSubjects** | Class organization |
+| **Enrollments** | Student → class assignments per term |
+| **Subjects** | Subject catalog |
+| **Grade / Assignment / Submission** | Academic assessment |
+| **Rubric / RubricCriterion / RubricScore** | Structured grading |
+| **Dormitorys / DormRooms / DormBeds / DormAssignments** | Boarding management |
+| **Announcement / Comment / Feedback** | Communication |
+| **LearningMaterial / MaterialView** | Resource management |
+| **DynamicQuestion / QuestionResponse** | Flexible assessments |
+
+### 3.3 Soft Delete Policy
+
+All models use **paranoid mode** (`deleted_at` timestamp). Deleted records are excluded from default queries but recoverable.
+
+### 3.4 Audit Fields
+
+All models track `created_at`, `updated_at`, and `deleted_at` using timestamptz for timezone safety.
 
 ---
 
-## Relationships
+## 4. Role-Based Access Control
+
+### 4.1 The Permission System
+
+Access control is built on a **two-layer model**:
+
+1. **Static catalog** — `Config/permissions.json` defines every valid permission key, every position, and every department scope.
+2. **Per-admin grants** — `Admins.permissions` (JSONB column) stores what a specific admin actually holds.
 
 ```
-User ──┬── hasMany ──► Event (as organizer)
-       ├── hasMany ──► Attendee
-       ├── hasMany ──► Transaction
-       ├── hasMany ──► EventScanner
-       └── hasMany ──► UserInstitution
-
-Event ──┬── hasMany ──► Ticket
-        ├── hasMany ──► Attendee
-        ├── hasOne  ──► PaymentInfo
-        ├── hasMany ──► EventScanner
-        ├── hasMany ──► EventInvite
-        └── hasMany ──► EventInstitution
-
-Ticket ──┬── hasMany ──► Attendee
-         ├── hasMany ──► TicketInvite
-         └── hasMany ──► TicketInstitution
-
-Attendee ─── hasOne ──► ScannedTickets (scan record)
+permissions.json          → "What CAN exist in the system"
+admins.permissions (JSONB)→ "What THIS admin actually HAS"
 ```
 
----
+This separation allows adding new roles without schema migrations, while still enforcing strict validation.
 
-## Core Business Flows
+### 4.2 Permission Catalog
 
-### Flow 1: Ticket Purchase Process
+Each permission key has metadata:
 
-```
-┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
-│  Client  │───▶│  Create  │───▶│  Send to │───▶│ Payment  │
-│  Request │    │Transaction│    │Veribroke │    │ Gateway  │
-└──────────┘    └──────────┘    └──────────┘    └──────────┘
-                       │                               │
-                       ▼                               ▼
-                 Status: PENDING                  MPESA STK Push
-                                                         │
-                                                         ▼
-┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
-│  Update  │◀───│ Consumer │◀───│ RabbitMQ │◀───│ Callback │
-│ Attendees│    │Processes │    │ Notification│  │ Response │
-└──────────┘    └──────────┘    └──────────┘    └──────────┘
-```
-
-**Step-by-Step:**
-
-1. **User initiates purchase** - Selects ticket type and quantity
-2. **Transaction created** - Status: `PENDING`, ticket quantity temporarily reduced
-3. **Payment request sent** - Via `sendPaymentRequest()` to Veribroke
-4. **Veribroke processes** - Sends MPESA STK push to user's phone
-5. **Callback received** - Veribroke sends result to RabbitMQ (`veribroke-notifications` exchange)
-6. **Consumer processes** - `startMpesaSuccessConsumer()` handles the callback:
-   - Updates transaction status (`SUCCESS`, `FAILED`, or `CANCELLED`)
-   - If **SUCCESS**: Creates attendee records (one per person)
-   - If **FAILED/CANCELLED**: Restores ticket quantity
-7. **User notified** - Of purchase result
-
-### Flow 2: User Synchronization (Verisafe Integration)
-
-```
-Verisafe ──▶ RabbitMQ ──▶ Sherehe Consumer
-(User Service)  (fanout)   (startVerisafeListener)
-```
-
-**Events processed:**
-
-| Event Type | Action |
-|------------|--------|
-| `user.created` | Create user in Sherehe database |
-| `user.updated` | Update existing user information |
-
-### Flow 3: Institution Connection Sync
-
-```
-Verisafe ──▶ RabbitMQ ──▶ Sherehe Consumer
-(Institution) (topic)     (consumeInstitutionEvents)
-```
-
-**Events processed:**
-
-| Event Type | Action |
-|------------|--------|
-| `user.institution.connected` | Create user-institution link |
-| `user.institution.disconnected` | Remove user-institution link |
-
-### Flow 4: Event Access Control
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    EVENT SCOPE VALIDATION                       │
-├─────────────────┬─────────────────┬─────────────────────────────┤
-│    PUBLIC       │   INSTITUTION    │         PRIVATE             │
-├─────────────────┼─────────────────┼─────────────────────────────┤
-│ Anyone can view │ Only users from  │ Only invited users          │
-│ and purchase    │ linked institu-  │ (EventInvite token)         │
-│                 │ tions can access │ can access                  │
-└─────────────────┴─────────────────┴─────────────────────────────┘
-```
-
-### Flow 5: Ticket Scanning
-
-```
-┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
-│ Scanner  │───▶│ Verify   │───▶│ Check if │───▶│ Create   │
-│ App      │    │ Attendee │    │ Already  │    │ Scan     │
-│          │    │ Exists   │    │ Scanned  │    │ Record   │
-└──────────┘    └──────────┘    └──────────┘    └──────────┘
-                                    │
-                                    ▼
-                              ┌──────────┐
-                              │  Reject  │
-                              │Duplicate │
-                              │  Entry   │
-                              └──────────┘
-```
-
----
-
-
-## RabbitMQ Configuration
-
-### Exchanges
-
-| Exchange Name | Type | Purpose |
-|---------------|------|---------|
-| `verisafe.events.topic` | topic | User & institution events from Verisafe |
-| `io.opencrafts.veribroke` | direct | Payment requests to Veribroke |
-| `io.opencrafts.veribroke-notifications` | topic | Payment callbacks from Veribroke |
-
-### Queues & Bindings
-
-| Queue | Exchange | Routing Key | Consumer |
-|-------|----------|-------------|----------|
-| (auto-generated) | `verisafe.events.topic` | `user.institution.*` | `consumeInstitutionEvents` |
-| `sherehe_mpesa_success_queue` | `io.opencrafts.veribroke-notifications` | `io.opencrafts.sherehe` | `startMpesaSuccessConsumer` |
-| (defined by V_QUEUE_NAME) | fanout exchange | - | `startVerisafeListener` |
-
-### Message Format Examples
-
-**Verisafe User Event:**
 ```json
-{
-  "meta": {
-    "source_service_id": "io.opencrafts.verisafe",
-    "event_type": "user.created",
-    "request_id": "uuid"
-  },
-  "user": {
-    "id": "uuid",
-    "email": "user@example.com",
-    "username": "john_doe",
-    "name": "John Doe",
-    "phone": "+254700000000"
-  }
+"student:record:edit": {
+  "label": "Edit student records",
+  "module": "students",
+  "riskLevel": "high"
 }
 ```
 
-**Verisafe Institution Event:**
+Risk levels (`low`, `medium`, `high`, `critical`) inform UI warnings and audit requirements.
+
+### 4.3 Admin Roles
+
+The system defines **60+ admin positions** across 11 departments:
+
+| Department | Example Positions |
+|---|---|
+| **Leadership** | Principal, Vice Principal, Assistant Principals |
+| **Finance** | Business Manager, Accountant, Payroll Officer |
+| **Academics** | Academic Dean, Registrar, HoD, SEN Coordinator |
+| **Student Affairs** | Dean of Students, Counselor, Nurse |
+| **Sports** | Athletic Director, Head Coach, Trainer |
+| **Clubs** | Clubs Coordinator, Band Director, STEM Coordinator |
+| **Dorms** | Director of Boarding, Housemaster, Matron |
+| **HR** | HR Manager, CPD Coordinator, Compliance Officer |
+| **Operations** | Facilities Manager, Transport Manager, Security |
+| **IT** | IT Manager, IT Support, Data Protection Officer |
+| **Communications / Admissions / Development** | Marketing, Admissions, Fundraising |
+
+Each position has:
+- **Default permissions** — auto-applied on creation
+- **Department** — for scoping (e.g., which sports a coach handles)
+- **Seniority** — for escalation rules
+- **Scope requirement** — some positions (HoD, Head Coach, Club Advisor) must specify which domain they manage
+
+### 4.4 Scoped Permissions
+
+Some permissions are limited to a domain:
+
 ```json
-{
-  "meta": {
-    "source_service_id": "io.opencrafts.verisafe",
-    "event_type": "user.institution.connected",
-    "request_id": "uuid"
-  },
-  "institution_connection": {
-    "account_id": "user-uuid",
-    "institution_id": 123
-  }
-}
+{ "sport:manage": true, "scope": "football" }
 ```
 
-**Veribroke Payment Callback:**
-```json
-{
-  "request_id": "transaction-uuid",
-  "success": true,
-  "message": "Payment successful",
-  "metadata": {
-    "Body": {
-      "stkCallback": {
-        "MerchantRequestID": "merchant-id",
-        "CheckoutRequestID": "checkout-id",
-        "ResultCode": 0,
-        "ResultDesc": "Success"
-      }
-    }
-  }
-}
-```
+A football coach with `sport:manage` cannot manage basketball. Scopes are validated against `permissions.json → departments`.
+
+### 4.5 Super-Admin
+
+The `Principal` position (and any admin granted `"all": true`) bypasses per-key checks. Only a super-admin may grant `"all"` to another admin — enforced server-side.
 
 ---
 
-## Environment Variables
+## 5. Feature Modules
 
-| Variable | Description |
-|----------|-------------|
-| `RABBITMQ_HOST` | RabbitMQ server host |
-| `RABBITMQ_PORT` | RabbitMQ port |
-| `RABBITMQ_USER` | RabbitMQ username |
-| `RABBITMQ_PASSWORD` | RabbitMQ password |
-| `RABBITMQ_VHOST` | RabbitMQ virtual host |
-| `EXCHANGE_NAME` | Default exchange (Veribroke) |
-| `ROUTING_KEY` | Default routing key |
-| `RABBITMQ_NOTIFICATION_EXCHANGE` | Notification exchange |
-| `SHEREHE_ROUTING_KEY` | Sherehe routing key |
-| `V_QUEUE_NAME` | Verisafe queue name |
-| `V_EXCHANGE_NAME` | Verisafe exchange name |
-| `V_ROUTING_KEY` | Verisafe routing key |
+### 5.1 Authentication & Account Management
+
+**Status:** In progress (next phase)
+
+- JWT-based login/logout
+- Refresh token rotation
+- Password reset via email
+- Email verification
+- Account locking after failed attempts
+- Session invalidation on password change
+
+### 5.2 User Management
+
+**Status:** Students, Teachers, Parents, Admins — models complete, routes in progress
+
+- Create/list/view/update/delete each role
+- Role-specific validation (dates, employee IDs, grade levels)
+- Cascade delete policies (soft delete by default)
+
+### 5.3 Parent–Student Linking
+
+**Status:** Model + associations complete
+
+- Many-to-many via `ParentStudent` join table
+- Track relationship (`father`, `mother`, `guardian`) per link
+- Mark primary contact per student
+- Endpoint: `GET /parent/:id/children` returns children with full profile
+
+### 5.4 Academic Management
+
+**Status:** Planned (Phase 5)
+
+- Academic years and terms
+- Class levels and streams
+- Subject catalog
+- Enrollments per term
+- Class-subject assignments
+
+### 5.5 Assessment & Grading
+
+**Status:** Planned
+
+- Assignments
+- Submissions
+- Rubric-based grading
+- Grade publishing
+
+### 5.6 Boarding / Dormitory
+
+**Status:** Planned
+
+- Dormitories → rooms → beds hierarchy
+- Dorm assignments
+- Dorm-specific permissions (Housemaster, Matron)
+
+### 5.7 Communication
+
+**Status:** Planned
+
+- Announcements (school-wide or targeted)
+- Comments and feedback
+- Email notifications (see Section 7)
+
+### 5.8 Extracurricular
+
+**Status:** Data model ready (via admin permissions)
+
+- Sports teams and coaches
+- Clubs and advisors
+- Scoped management per sport/club
 
 ---
 
-## Error Handling
+## 6. Security Model
 
-### Transaction Rollback Strategy
-- Database transactions wrap purchase operations
-- On failure: rollback attendee creation, restore ticket quantities
-- Failed payment: ticket quantity restored
+### 6.1 Authentication
 
-### Message Acknowledgment
-- **Success**: `channel.ack(msg)`
-- **Recoverable error**: `channel.nack(msg, false, true)` (requeue)
-- **Non-recoverable/redelivered**: `channel.ack(msg)` (prevent infinite loop)
+- Passwords hashed (bcrypt/argon2 — to be confirmed in implementation)
+- JWT access tokens (short-lived, ~15 min)
+- Refresh tokens (long-lived, ~7–30 days, rotating)
+- Tokens invalidated on password change or admin revocation
 
-### Soft Delete (Paranoid Mode)
-All models support soft deletion with `deleted_at` timestamp. Use `scope: 'withDeleted'` to include deleted records.
+### 6.2 Authorization
 
----
+- Every protected route wrapped with `authenticate` (identifies user) then `authorize(permissionKey)` (checks grant)
+- Permission checks read from DB + validated against `permissions.json`
+- Scope-aware checks for domain-limited roles
+- Super-admin (`"all": true`) bypass — audited
 
-## Security Considerations
+### 6.3 Data Protection
 
-1. **Authentication required for**:
-   - Event creation/management
-   - Ticket purchase
-   - Scanning operations
+- `password` excluded from all serialized responses
+- `deleted_at` excluded from default scopes
+- Sensitive fields (`medical_notes`, `counseling_notes`) gated behind specific permissions
+- Soft deletes preserve audit trail
 
-2. **Authorization rules**:
-   - Only event organizers can add scanners
-   - Scanners can only scan their assigned events
-   - Supervisors have broader permissions
+### 6.4 Audit & Compliance
 
-3. **Scope validation**:
-   - Institution-scoped events check user's institution membership
-   - Private events require valid invite token
+- All mutations logged with actor, timestamp, before/after (planned)
+- Data Protection Officer role with `privacy:manage`, `data_request:manage`, `breach:manage`
+- Safeguarding Officer with `safeguard:manage`, `authority:report`, `confidential:access`
 
-4. **Idempotency**:
-   - Transaction references prevent duplicate payments
-   - Unique constraints prevent duplicate scans per attendee
+### 6.5 Error Handling
 
----
-
-## Database Indexes
-
-| Model | Index Fields | Purpose |
-|-------|--------------|---------|
-| Event | `(id, organizer_id)` | Fast event lookup by organizer |
-| Ticket | `(event_id, ticket_name)` | Ticket search by event |
-| Attendee | (implicit via indexes file) | User/event lookups |
-| Transaction | `(user_id, ticket_id)` | Transaction history |
-| EventScanner | `(event_id, user_id)` | Unique scanner assignment |
-| EventInvite | `(id, token)` | Unique invite tokens |
-| ScannedTickets | `(attendee_id, created_at)` | Prevent duplicate scans |
+- Centralized error middleware maps:
+  - `SequelizeUniqueConstraintError` → 409
+  - `SequelizeValidationError` → 400
+  - Unknown errors → 500 (never leaked to client)
+- Structured logging via Pino (request, response, error)
 
 ---
 
-## Logging
+## 7. Email & Notification System
 
-The `logs()` utility captures:
-- Duration (microseconds)
-- Log level (INFO/ERR)
-- Source IP
-- Event type
-- Message
-- Request ID
-- Status code
-- Additional metadata
+### 7.1 Scope
+
+The system sends transactional and informational emails to all four roles. Emails are categorized:
+
+| Category | Examples |
+|---|---|
+| **Account & Security** | Welcome, password reset, email verification, suspicious login |
+| **Academic** | Enrollment confirmation, report cards, exam schedules |
+| **Attendance** | Absence alerts, late arrivals |
+| **Financial** | Fee bills, payment confirmations, overdue reminders |
+| **School Life** | Events, field trips, newsletters |
+| **Administrative** | Task assignments, approvals, reports |
+| **Emergency** | School closures, safety alerts (non-opt-out) |
+
+### 7.2 Architecture (Planned)
+
+- Central `emailService.sendEmail({ to, template, data })`
+- Templates stored as files or inline
+- Priority levels: `critical` (bypass user prefs), `transactional`, `informational`
+- Batching for reminders
+
+### 7.3 Recipient-Specific Emails
+
+| Role | Sample Emails |
+|---|---|
+| **Student** | Enrollment confirmation, exam results, assignment reminders, dorm assignment |
+| **Teacher** | Teaching assignment, grade submission deadlines, leave approvals, payslips |
+| **Parent** | Absence alerts, report cards, fee bills, field trip permissions |
+| **Admin** | Account setup, permission changes, system alerts, workflow approvals |
+
+---
+
+## 8. Current Progress
+
+### Completed
+
+| Area | Status |
+|---|---|
+| Database schema (core models) | ✅ Complete |
+| Migrations (teachers, students) | ✅ Complete (with type fix pending) |
+| Associations (Users ↔ Students/Teachers/Parents/Admins) | ✅ Complete (one bug fix pending) |
+| Parent–Student M:N | ✅ Complete |
+| Permissions JSON catalog | ✅ Complete |
+| Permission loader & validator | ✅ Complete |
+| Route skeletons (User, Student, Teacher, Parent, Admin) | ✅ Complete |
+| Authentication middleware | ⏳ Next |
+| Admin CRUD | ⏳ Next |
+| Student / Teacher / Parent CRUD | ⏳ Next |
+| Email service | ⏳ Next |
+
+### Known Issues to Fix
+
+1. **`Admins.hasMany(Admins, ...)`** — should be `Users.hasMany(Admins, ...)`
+2. **`Admim.route.js`** typo — should be `Admin.route.js`
+3. **`status_enum` collision** — teachers and students migrations share the same ENUM type name; need distinct names (`teacher_status_enum`, `student_status_enum`)
+4. **`dotenv.config()` ordering** — must be the first import (`import 'dotenv/config'`) so DB config reads env vars
+5. **`permissions.json` index bug** — `fields: ['name']` references a non-existent column in the `ParentStudent` model
+
+---
+
+## 9. Roadmap
+
+### Phase 1 — Authentication (Next)
+
+- `POST /auth/login`, `/auth/refresh`, `/auth/logout`, `GET /auth/me`
+- `authenticate` and `authorize` middleware
+- JWT signing/verification service
+
+### Phase 2 — Admin CRUD & Permission Enforcement
+
+- Full admin CRUD with validation against `permissions.json`
+- Position catalog endpoints (`GET /admin/positions`)
+- Config reload endpoint
+- Super-admin seeding script
+
+### Phase 3 — Students, Teachers, Parents CRUD
+
+- Full CRUD for each role
+- Parent–child linking endpoints
+- Date validation, uniqueness validation
+
+### Phase 4 — Account Security
+
+- Password reset, email verification, change password
+- Rate limiting on auth endpoints
+- Session invalidation
+
+### Phase 5 — Academic Core
+
+- Academic years, terms, classes, subjects
+- Enrollments
+- Timetables
+
+### Phase 6 — Assessment
+
+- Assignments, submissions, rubrics, grading
+
+### Phase 7 — Boarding & Extracurricular
+
+- Dorms, sports, clubs
+
+### Phase 8 — Communication
+
+- Announcements, email system, notifications
+
+---
+
+## 10. Non-Functional Requirements
+
+| Requirement | Target |
+|---|---|
+| **Response time** | < 300 ms p95 for read endpoints |
+| **Concurrency** | 500+ concurrent users per school |
+| **Data retention** | Soft deletes retained indefinitely; hard purge on request |
+| **Availability** | 99.5% uptime target |
+| **Security** | OWASP Top 10 mitigations; passwords never logged |
+| **Auditability** | All mutations logged with actor, timestamp, diff |
+| **Portability** | PostgreSQL 14+; Node 20+ |
+
+---
+
+## 11. Development Conventions
+
+| Convention | Rule |
+|---|---|
+| **File naming** | `<Entity>.model.js`, `<Entity>.route.js`, `<Entity>.repository.js` |
+| **Imports** | Always from `Models/index.js`, never directly from `Models/*.model.js` (prevents duplicate model instances) |
+| **Association aliases** | Explicit `as:` on every association; match through-model aliases to `belongsToMany` `as:` |
+| **Environment** | `import 'dotenv/config'` must be first in `app.js` |
+| **Errors** | Throw objects with `statusCode`; central handler maps to HTTP status |
+| **Dates** | API accepts `YYYY-MM-DD` for date-only fields; models use `DATEONLY` for pure dates |
+| **Permissions** | Never hardcode permission strings — import from `Config/permissions.js` |
+| **Migrations** | One migration per logical change; always include `down` |
+
+---
+
+## 12. Glossary
+
+| Term | Meaning |
+|---|---|
+| **Position** | An admin role key from `permissions.json` (e.g., `academic_dean`) |
+| **Permission** | A capability key (e.g., `student:record:edit`) |
+| **Scope** | A domain limitation (e.g., `football`, `mathematics`) |
+| **Preset** | Default permissions for a position, from JSON |
+| **Grant** | A permission recorded in `admins.permissions` |
+| **Super-admin** | An admin with `"all": true` |
+| **Paranoid** | Sequelize soft-delete mode using `deleted_at` |
+| **HoD** | Head of Department |
+| **SEN** | Special Educational Needs |
+| **CPD** | Continuing Professional Development |
+| **DPO** | Data Protection Officer |
+| **IEP** | Individualized Education Plan |
+
+---
+
+## 13. Open Questions
+
+1. **Password hashing** — bcrypt vs argon2? (recommend argon2id)
+2. **File storage** — stay local or move to S3-compatible (MinIO/S3)?
+3. **Multi-tenancy** — one database per school, or shared schema with `school_id`?
+4. **Time zone handling** — store UTC timestamptz (current) but what timezone does the school operate in for scheduling?
+5. **Email provider** — SMTP, SendGrid, Mailgun, or AWS SES?
+6. **Payment gateway** — how are fees collected? (Stripe, local gateway, bank transfer)
+7. **SMS** — needed for parents without email?
+8. **Mobile app** — is a native app planned, or web-only?
+
+---
+
+*This document is a living specification and will evolve as implementation progresses. For the latest association wiring, permission catalog, and API contracts, refer to the source files in `Config/` and `Models/`.*

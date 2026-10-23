@@ -7,7 +7,7 @@ import {
 
 
 export const getStudentByIdController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const userId = req.params.id;
@@ -23,7 +23,7 @@ export const getStudentByIdController = async (req, res) => {
 };
 
 export const getStudentProfileController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const userId = req.user.id;
@@ -40,7 +40,7 @@ export const getStudentProfileController = async (req, res) => {
 
 
 export const updateStudentController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const userId = req.user.id;
@@ -58,7 +58,7 @@ export const updateStudentController = async (req, res) => {
 
 
 export const getStudentsController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const users = await getStudentsService();
@@ -73,7 +73,7 @@ export const getStudentsController = async (req, res) => {
 };
 
 export const getParentsController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const student_id = req.params.student_id

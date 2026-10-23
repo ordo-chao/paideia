@@ -6,7 +6,7 @@ import {
 
 
 export const getAdminByIdController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const userId = req.params.id;
@@ -23,7 +23,7 @@ export const getAdminByIdController = async (req, res) => {
 
 
 export const getAdminProfileController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const userId = req.user.id;
@@ -40,7 +40,7 @@ export const getAdminProfileController = async (req, res) => {
 
 
 export const updateAdminController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const userId = req.user.id;
@@ -58,7 +58,7 @@ export const updateAdminController = async (req, res) => {
 
 
 export const getAdminsController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const users = await getAdminsService();

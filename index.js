@@ -56,7 +56,8 @@ import userRouter from './Routes/User.route.js';
 import studentRouter from './Routes/Student.route.js';
 import teacherRouter from './Routes/Teacher.route.js';
 import parentRouter from './Routes/Parent.route.js';
-import adminRouter from './Routes/Admim.route.js';
+import adminRouter from './Routes/Admin.route.js';
+import passwordRoute from './Routes/Password.route.js'
 
 
 app.use('/user', userRouter);
@@ -64,6 +65,7 @@ app.use('/student', studentRouter);
 app.use('/teacher', teacherRouter);
 app.use('/parent', parentRouter);
 app.use('/admin', adminRouter);
+app.use('/password' , passwordRoute)
 
 
 

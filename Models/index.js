@@ -28,6 +28,7 @@ import Teachers from './Teachers.model.js';
 import Terms from './Terms.model.js';
 import Users from './Users.model.js';
 import ParentStudent from './Parent_Student.model.js';
+import Token from './token.model.js'
 
 /* ---------------- Users ↔ role tables ---------------- */
 
@@ -74,6 +75,18 @@ Parents.belongsTo(Users, {
   as: 'user',
   onDelete: 'CASCADE',
 });
+
+Token.belongsTo(Users , {
+    foreignKey: 'user_id',
+  as: 'user',
+  onDelete: 'CASCADE',
+})
+
+Users.hasMany(Token,{
+    foreignKey: 'user_id',
+  as: 'tokens',
+  onDelete: 'CASCADE',
+})
 
 /* ---------------- Parents ↔ Students (M:N) ---------------- */
 
@@ -153,4 +166,5 @@ export {
   Terms,
   Users,
   ParentStudent,
+  Token
 };
