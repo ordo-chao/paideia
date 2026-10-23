@@ -105,3 +105,16 @@ export const checkDeletedUserRepository = async (email) => {
     throw err;
   }
 };
+
+export const findUserByEmailRepository = async (email) =>{
+    try {
+    const user = await User.findOne({
+      where: { email },
+      paranoid: false
+    });
+    return user;
+  } catch (error) {
+    const err = new Error(error.message);
+    throw err;
+  }
+}

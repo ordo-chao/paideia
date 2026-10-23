@@ -10,7 +10,7 @@ import {generateToken} from '../Utils/JWT.js'
 
 
 export const createUserController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const user = await createUserService(req.body);
@@ -30,7 +30,7 @@ export const createUserController = async (req, res) => {
 
 
 export const getUserByIdController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const userId = req.params.id;
@@ -46,7 +46,7 @@ export const getUserByIdController = async (req, res) => {
 };
 
 export const getUserProfileController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const userId = req.user.id;
@@ -63,7 +63,7 @@ export const getUserProfileController = async (req, res) => {
 
 
 export const updateUserController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const userId = req.user.id;
@@ -79,7 +79,7 @@ export const updateUserController = async (req, res) => {
 };
 
 export const deleteUserController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const userId = req.user.id;
@@ -95,7 +95,7 @@ export const deleteUserController = async (req, res) => {
 }
 
 export const loginUserController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const { email, password } = req.body;
@@ -113,7 +113,7 @@ export const loginUserController = async (req, res) => {
 };
 
 export const getUsersController = async (req, res) => {
-  const start = process.hrtime.bigint();
+  
 
   try {
     const users = await getUsersService();

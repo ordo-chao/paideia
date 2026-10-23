@@ -11,6 +11,11 @@ export const up = (pgm) => {
       primaryKey: true,
       default: pgm.func('gen_random_uuid()'),
     },
+    user_id:
+    {
+            type: 'uuid',
+      primaryKey: true,
+    },
     user_email: {
       type: 'varchar(255)',
       notNull: true
