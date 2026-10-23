@@ -28,6 +28,7 @@ export const verifyToken = (req, res, next) => {
       next();
 
   } catch (error) {
+    req.log.warn({ err: 'Invalid authentication token' })
     return res.status(401).json({ detail: 'Invalid authentication token' });
   }
 };
