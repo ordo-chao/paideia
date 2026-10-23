@@ -3,7 +3,6 @@
 A modern, full-featured school management platform with an integrated **e-learning engine** — designed to run the daily academic, administrative, and boarding operations of a school from a single backend, with a clean REST API for the frontend.
 
 Built with **Node.js, Express, Sequelize, and PostgreSQL**.
-
 ---
 
 ## Table of Contents
