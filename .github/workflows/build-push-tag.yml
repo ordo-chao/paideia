@@ -49,10 +49,17 @@ jobs:
           git clone https://github.com/ordo-chao/Devopps.git Devopps
           cd Devopps/Services/Paideia
 
+          # Fail loudly if the file isn't where we expect
+          if [ ! -f deployment.yaml ]; then
+            echo "ERROR: deployment.yaml not found in $(pwd)"
+            ls -la
+            exit 1
+          fi
+
           sed -i "s|image: ghcr.io/${{ env.REPO_LOWER }}:.*|image: ghcr.io/${{ env.REPO_LOWER }}:${{ github.sha }}|g" deployment.yaml
 
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add deployment.yaml
-          git commit -m "Update image to ${{ github.sha }}"
+          git commit -m "Update image to ${{ github.sha }}" || echo "No changes to commit"
           git push -f https://${GIT_TOKEN}@github.com/ordo-chao/Devopps.git main
