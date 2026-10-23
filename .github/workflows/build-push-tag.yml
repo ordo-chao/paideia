@@ -1,10 +1,12 @@
 name: CI/CD Pipeline
+
 on:
   push:
     branches: [ main ]
 
 jobs:
   build-and-push:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -37,6 +39,7 @@ jobs:
             ghcr.io/${{ env.REPO_LOWER }}:${{ github.sha }}
 
       - name: Update GitOps repository
+        if: github.ref == 'refs/heads/main'
         shell: bash
         env:
           GIT_TOKEN: ${{ secrets.GITOPS_PAT }}
