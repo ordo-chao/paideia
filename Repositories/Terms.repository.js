@@ -1,4 +1,4 @@
-import {Terms as Term} from "../Models/index.js";
+import {Terms as Term , AcademicYears as AcademicYear} from "../Models/index.js";
 import { Op } from "sequelize";
 
 export const createTermRepository = async (data) => {
@@ -12,7 +12,16 @@ export const createTermRepository = async (data) => {
 
 export const getTermByIdRepository = async (id) => {
   try {
-    const terms = await Term.findByPk(id);
+    const terms = await Term.findByPk(id , {
+      include: [
+        {
+          model: AcademicYear,
+          as: 'academicYear',
+          attributes: { exclude: ['id'] },
+        },
+      ],
+      raw: true
+    });
     return terms;
   } catch (error) {
     throw error;
@@ -36,7 +45,16 @@ export const updateTermRepository = async (id, data) => {
 
 export const getAllTermRepository = async () => {
   try {
-    const  terms = await Term.findAll();
+    const  terms = await Term.findAll({
+      include: [
+        {
+          model: AcademicYear,
+          as: 'academicYear',
+          attributes: { exclude: ['id'] },
+        },
+      ],
+      raw: true
+    });
     return  terms;
   } catch (error) {
     throw error;
@@ -72,6 +90,14 @@ export const searchTermRepository = async (query) => {
         { name: { [Op.iLike]: `%${query}%` } },
       ],
     },
+          include: [
+        {
+          model: AcademicYear,
+          as: 'academicYear',
+          attributes: { exclude: ['id'] },
+        },
+      ],
+      raw: true
   })
 
   return terms;

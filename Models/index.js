@@ -100,6 +100,43 @@ AcademicYears.hasMany(Terms, {
   onDelete: 'CASCADE',
 });
 
+
+ClassStreams.belongsTo(ClassLevels, {
+  foreignKey: 'class_level_id',
+  as: 'classLevel',
+  onDelete: 'CASCADE',
+});
+
+ClassLevels.hasMany(ClassStreams, {
+  foreignKey: 'class_level_id',
+  as: 'classStreams',
+  onDelete: 'CASCADE',
+});
+
+ClassStreams.belongsTo(AcademicYears, {
+  foreignKey: 'academic_year_id',
+  as: 'academicYears',
+  onDelete: 'CASCADE',
+});
+
+AcademicYears.hasMany(ClassStreams, {
+  foreignKey: 'academic_year_id',
+  as: 'classStreams',
+  onDelete: 'CASCADE',
+});
+
+ClassStreams.belongsTo(Teachers, {
+  foreignKey: 'teacher_id',
+  as: 'teacher',
+  onDelete: 'CASCADE',
+});
+
+Teachers.belongsTo(ClassStreams, {
+  foreignKey: 'class_stream_id',
+  as: 'classStream',
+  onDelete: 'CASCADE',
+});
+
 /* ---------------- Parents ↔ Students (M:N) ---------------- */
 
 Parents.belongsToMany(Students, {
