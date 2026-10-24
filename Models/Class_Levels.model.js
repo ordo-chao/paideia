@@ -18,6 +18,7 @@ const ClassLevels = sequelize.define(
     level_order: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      unique: true,
     },
 
     curriculum: {

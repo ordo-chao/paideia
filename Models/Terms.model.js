@@ -8,6 +8,7 @@ const Terms = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
     },
     academic_year_id: {
       type: DataTypes.UUID,
