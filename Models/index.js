@@ -28,7 +28,7 @@ import Teachers from './Teachers.model.js';
 import Terms from './Terms.model.js';
 import Users from './Users.model.js';
 import ParentStudent from './Parent_Student.model.js';
-import Token from './token.model.js'
+import Token from './Token.model.js'
 
 /* ---------------- Users ↔ role tables ---------------- */
 
@@ -87,6 +87,18 @@ Users.hasMany(Token,{
   as: 'tokens',
   onDelete: 'CASCADE',
 })
+
+Terms.belongsTo(AcademicYears, {
+  foreignKey: 'academic_year_id',
+  as: 'academicYear',
+  onDelete: 'CASCADE',
+});
+
+AcademicYears.hasMany(Terms, {
+  foreignKey: 'academic_year_id',
+  as: 'terms',
+  onDelete: 'CASCADE',
+});
 
 /* ---------------- Parents ↔ Students (M:N) ---------------- */
 

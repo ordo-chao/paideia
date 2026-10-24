@@ -59,6 +59,7 @@ import parentRouter from './Routes/Parent.route.js';
 import adminRouter from './Routes/Admin.route.js';
 import passwordRoute from './Routes/Password.route.js'
 import academicyearRouter from './Routes/Academic_Years.route.js'
+import termsRouter from './Routes/Terms.route.js'
 
 
 app.use('/user', userRouter);
@@ -68,6 +69,7 @@ app.use('/parent', parentRouter);
 app.use('/admin', adminRouter);
 app.use('/password' , passwordRoute)
 app.use('/academicyear', academicyearRouter)
+app.use('/terms', termsRouter)
 
 
 
