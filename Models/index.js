@@ -126,16 +126,16 @@ AcademicYears.hasMany(ClassStreams, {
 });
 
 ClassStreams.belongsTo(Teachers, {
-  foreignKey: 'teacher_id',
+  foreignKey: 'class_teacher_id',
   as: 'teacher',
   onDelete: 'CASCADE',
 });
 
-Teachers.belongsTo(ClassStreams, {
-  foreignKey: 'class_stream_id',
-  as: 'classStream',
-  onDelete: 'CASCADE',
-});
+// Teachers.belongsTo(ClassStreams, {
+//   foreignKey: 'class_stream_id',
+//   as: 'classStream',
+//   onDelete: 'CASCADE',
+// });
 
 /* ---------------- Parents ↔ Students (M:N) ---------------- */
 

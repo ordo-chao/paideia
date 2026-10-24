@@ -37,8 +37,7 @@ export const createTeacherService = async (data) => {
     const today = new Date();
     const birthDate = new Date(date_of_birth);
     const startDate = new Date(start_date)
-    const endDate = new Date(end_date);
-    if (birthDate > today || endDate > today || startDate > today) {
+    if (birthDate > today || startDate > today) {
       const err = new Error('Invalid date');
       err.statusCode = 400;
       throw err;
