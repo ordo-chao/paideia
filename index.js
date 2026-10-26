@@ -62,6 +62,7 @@ import academicyearRouter from './Routes/Academic_Years.route.js'
 import termsRouter from './Routes/Terms.route.js'
 import classlevelsRouter from './Routes/Class_Levels.route.js'
 import classstreamsRouter from './Routes/Class_Streams.route.js'
+import subjectsRouter from './Routes/Subjects.route.js'
 
 
 app.use('/user', userRouter);
@@ -74,6 +75,7 @@ app.use('/academicyear', academicyearRouter)
 app.use('/terms', termsRouter)
 app.use('/classlevels', classlevelsRouter)
 app.use('/classstreams', classstreamsRouter)
+app.use('/subjects', subjectsRouter)
 
 
 

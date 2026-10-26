@@ -52,7 +52,7 @@ const ClassStreams = sequelize.define(
     indexes: [
       {
         unique: true,
-        fields: ['class_level_id', 'academic_year_id']
+        fields: ['class_level_id', 'academic_year_id' , 'name']
       }
     ]
   }
