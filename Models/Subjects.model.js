@@ -21,7 +21,7 @@ const Subjects = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true
     },
-    is_core: {
+    type: {
       type: DataTypes.ENUM('core', 'elective'),
       allowNull: false
     },
@@ -42,9 +42,6 @@ const Subjects = sequelize.define(
     paranoid: true,
     deletedAt: 'deleted_at',
     freezeTableName: true,
-    defaultScope: {
-      attributes: { exclude: ['created_at', 'updated_at', 'deleted_at'] }
-    },
     scopes: {
       withDeleted: {
         attributes: { include: ['deleted_at'] }
