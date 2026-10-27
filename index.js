@@ -64,6 +64,7 @@ import classlevelsRouter from './Routes/Class_Levels.route.js'
 import classstreamsRouter from './Routes/Class_Streams.route.js'
 import subjectsRouter from './Routes/Subjects.route.js'
 import classsubjectsRouter from './Routes/Class_Subjects.route.js'
+import enrollmentsRouter from './Routes/Enrollments.route.js'
 
 
 app.use('/user', userRouter);
@@ -78,6 +79,7 @@ app.use('/classlevels', classlevelsRouter)
 app.use('/classstreams', classstreamsRouter)
 app.use('/subjects', subjectsRouter)
 app.use('/classsubjects', classsubjectsRouter)
+app.use('/enrollments', enrollmentsRouter)
 
 
 

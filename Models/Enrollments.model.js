@@ -17,13 +17,10 @@ const Enrollments = sequelize.define("enrollments", {
     type: DataTypes.UUID,
   },
 
-  academic_year_id: {
-    type: DataTypes.UUID,
-  },
-
   enrolled_on: {
     type: DataTypes.DATE,
     allowNull: false,
+    defaultValue: DataTypes.NOW
   },
 
   status: {
