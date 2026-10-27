@@ -131,6 +131,68 @@ ClassStreams.belongsTo(Teachers, {
   onDelete: 'CASCADE',
 });
 
+ClassSubjects.belongsTo(ClassStreams, {
+  foreignKey: 'class_stream_id',
+  as: 'classStream',
+  onDelete: 'CASCADE',
+});
+
+ClassStreams.hasMany(ClassSubjects, {
+  foreignKey: 'class_stream_id',
+  as: 'classSubjects',
+  onDelete: 'CASCADE',
+});
+
+ClassSubjects.belongsTo(Teachers, {
+  foreignKey: 'teacher_id',
+  as: 'teacher',
+  onDelete: 'CASCADE',
+});
+
+Teachers.hasMany(ClassSubjects, {
+  foreignKey: 'teacher_id',
+  as: 'classSubjects',
+  onDelete: 'CASCADE',
+});
+
+ClassSubjects.belongsTo(Subjects, {
+  foreignKey: 'subject_id',
+  as: 'subject',
+  onDelete: 'CASCADE',
+});
+
+Subjects.hasMany(ClassSubjects, {
+  foreignKey: 'subject_id',
+  as: 'classSubjects',
+  onDelete: 'CASCADE',
+});
+
+Enrollments.belongsTo(Students, {
+  foreignKey: 'student_id',
+  as: 'student',
+  onDelete: 'CASCADE',
+});
+
+Students.hasMany(Enrollments, {
+  foreignKey: 'student_id',
+  as: 'enrollments',
+  onDelete: 'CASCADE',
+});
+
+Enrollments.belongsTo(ClassStreams, {
+  foreignKey: 'class_stream_id',
+  as: 'classStream',
+  onDelete: 'CASCADE',
+});
+
+ClassStreams.hasMany(Enrollments, {
+  foreignKey: 'class_stream_id',
+  as: 'enrollments',
+  onDelete: 'CASCADE',
+});
+
+
+
 // Teachers.belongsTo(ClassStreams, {
 //   foreignKey: 'class_stream_id',
 //   as: 'classStream',

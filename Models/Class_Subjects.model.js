@@ -14,7 +14,7 @@ const ClassSubjects = sequelize.define("class_subjects", {
   },
 
   subject_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     allowNull: false,
   },
   teacher_id: {
@@ -22,6 +22,10 @@ const ClassSubjects = sequelize.define("class_subjects", {
     allowNull: false,
   },
   periods_per_week: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  minutes_per_period:{
     type: DataTypes.INTEGER,
     allowNull: false,
   },
