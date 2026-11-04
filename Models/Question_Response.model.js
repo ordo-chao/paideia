@@ -4,10 +4,8 @@ import sequelize from '../Utils/db.js';
 const QuestionResponse = sequelize.define('question_responses', {
   id: { type: DataTypes.UUID, primaryKey: true, defaultValue: DataTypes.UUIDV4 },
   question_id: { type: DataTypes.UUID, allowNull: false },
-  user_id: { type: DataTypes.UUID, allowNull: false },
   student_id: { type: DataTypes.UUID, allowNull: true },
   submission_id: { type: DataTypes.UUID, allowNull: true },
-  assignment_id: { type: DataTypes.UUID, allowNull: true },
 
   response_value: { type: DataTypes.JSONB },
 

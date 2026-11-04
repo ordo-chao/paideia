@@ -10,7 +10,7 @@ import DormAssignments from './Dorm_Assignments.model.js';
 import DormBeds from './Dorm_Beds.model.js';
 import DormRooms from './Dorm_Rooms.model.js';
 import Dormitorys from './Dormitorys.model.js';
-import DynamicQuestion from './Dynamic_Question.model.js';
+import DynamicQuestions from './Dynamic_Question.model.js';
 import Enrollments from './Enrollments.model.js';
 import Feedback from './Feedback.model.js';
 import Grade from './Grade.model.js';
@@ -295,7 +295,7 @@ export {
   DormBeds,
   DormRooms,
   Dormitorys,
-  DynamicQuestion,
+  DynamicQuestions,
   Enrollments,
   Feedback,
   Grade,

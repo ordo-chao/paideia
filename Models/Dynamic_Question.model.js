@@ -4,8 +4,6 @@ import sequelize from '../Utils/db.js';
 const DynamicQuestion = sequelize.define('dynamic_questions', {
   id: { type: DataTypes.UUID, primaryKey: true, defaultValue: DataTypes.UUIDV4 },
 
-  // Scope: attach to a class subject, an assignment, or both
-  class_subject_id: { type: DataTypes.UUID, allowNull: true },
   assignment_id: { type: DataTypes.UUID, allowNull: true },
 
   question_text: { type: DataTypes.TEXT, allowNull: false },
@@ -27,7 +25,7 @@ const DynamicQuestion = sequelize.define('dynamic_questions', {
   display_order: { type: DataTypes.INTEGER, defaultValue: 0 },
 
   ask_timing: {
-    type: DataTypes.ENUM('before_registration', 'after_registration', 'after_event'),
+    type: DataTypes.ENUM('quiz' , 'before_registration', 'after_registration', 'after_event'),
     defaultValue: 'before_registration',
   },
   conditional_logic: { type: DataTypes.JSONB },
@@ -44,7 +42,6 @@ const DynamicQuestion = sequelize.define('dynamic_questions', {
   paranoid: true,
   deletedAt: 'deleted_at',
   indexes: [
-    { fields: ['class_subject_id'] },
     { fields: ['assignment_id'] },
   ],
 });
