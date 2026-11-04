@@ -1,7 +1,7 @@
 import AcademicYears from './Academic_Years.model.js';
 import Admins from './Admins.model.js';
 import Announcement from './Announcement.model.js';
-import Assignment from './Assignment.model.js';
+import Assignments from './Assignment.model.js';
 import ClassLevels from './Class_Levels.model.js';
 import ClassStreams from './Class_Streams.model.js';
 import ClassSubjects from './Class_Subjects.model.js';
@@ -10,7 +10,7 @@ import DormAssignments from './Dorm_Assignments.model.js';
 import DormBeds from './Dorm_Beds.model.js';
 import DormRooms from './Dorm_Rooms.model.js';
 import Dormitorys from './Dormitorys.model.js';
-import DynamicQuestion from './Dynamic_Question.model.js';
+import DynamicQuestions from './Dynamic_Question.model.js';
 import Enrollments from './Enrollments.model.js';
 import Feedback from './Feedback.model.js';
 import Grade from './Grade.model.js';
@@ -246,11 +246,47 @@ Parents.hasMany(ParentStudent, {
   onDelete: 'CASCADE',
 });
 
+Assignments.belongsTo(ClassSubjects, {
+  foreignKey: 'class_subject_id',
+  as: 'classSubjects',
+  onDelete: 'CASCADE',
+});
+
+ClassSubjects.hasMany(Assignments, {
+  foreignKey: 'class_subject_id',
+  as: 'assignments',
+  onDelete: 'CASCADE',
+});
+
+Assignments.belongsTo(Teachers, {
+  foreignKey: 'teacher_id',
+  as: 'teacher',
+  onDelete: 'CASCADE',
+});
+
+Teachers.hasMany(Assignments, {
+  foreignKey: 'teacher_id',
+  as: 'assignments',
+  onDelete: 'CASCADE',
+});
+
+Assignments.belongsTo(Terms, {
+  foreignKey: 'term_id',
+  as: 'term',
+  onDelete: 'CASCADE',
+});
+
+Terms.hasMany(Assignments, {
+  foreignKey: 'term_id',
+  as: 'assignments',
+  onDelete: 'CASCADE',
+});
+
 export {
   AcademicYears,
   Admins,
   Announcement,
-  Assignment,
+  Assignments,
   ClassLevels,
   ClassStreams,
   ClassSubjects,
@@ -259,7 +295,7 @@ export {
   DormBeds,
   DormRooms,
   Dormitorys,
-  DynamicQuestion,
+  DynamicQuestions,
   Enrollments,
   Feedback,
   Grade,

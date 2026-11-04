@@ -5,7 +5,7 @@ const Assignment = sequelize.define('assignments', {
   id: { type: DataTypes.UUID, primaryKey: true, defaultValue: DataTypes.UUIDV4 },
   class_subject_id: { type: DataTypes.UUID, allowNull: false },
   term_id: { type: DataTypes.UUID, allowNull: false },
-  created_by: { type: DataTypes.UUID },
+  teacher_id: { type: DataTypes.UUID },
 
   title: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.TEXT },
