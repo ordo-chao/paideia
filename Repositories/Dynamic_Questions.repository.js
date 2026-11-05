@@ -69,10 +69,23 @@ export const searchDynamicQuestionRepository = async (query) => {
   const dynamic_question = await DynamicQuestion.findAll({
     where: {
       [Op.or]: [
-        { name: { [Op.iLike]: `%${query}%` } },
+        { question_text: { [Op.iLike]: `%${query}%` } },
       ],
     },
   })
 
   return dynamic_question;
 };
+
+export const getAllDynamicQuestionByAssignmentIdRepository = async (id) => {
+  try {
+    const dynamic_question = await DynamicQuestion.findAll({
+      where: {
+        assignment_id: id
+      }
+    });
+    return dynamic_question;
+  } catch (error) {
+    throw error;
+  }
+}

@@ -42,6 +42,7 @@ export const up = (pgm) => {
     is_required: { type: 'boolean', defaultValue: false },
     is_active:    { type: 'boolean', defaultValue: false },
     display_order:           { type: 'integer', defaultValue: 1 },
+    is_admin_only:           { type: 'boolean', defaultValue: false },
 
     options:        { type: 'jsonb' },
     validation_rules:        { type: 'jsonb' },
