@@ -1,4 +1,4 @@
-import {Submissions as Submission} from "../Models/index.js";
+import {Submissions as Submission , Assignments as Assignment , Users as User , Students as Student , ClassSubjects as ClassSubject , ClassStreams as ClassStream , Subjects as Subject , Teachers as Teacher} from "../Models/index.js";
 import { Op } from "sequelize";
 
 export const createSubmissionRepository = async (data) => {
@@ -15,16 +15,54 @@ export const getSubmissionByIdRepository = async (id) => {
     const submission = await Submission.findByPk(id , {
       include: [
         {
-          model: User,
-          as: 'user',
-          attributes: { 
-            exclude: ['password'],
-            include: ['email']
-           },
+          model: Student,
+          as: 'student',
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: { exclude: ['created_at' , 'updated_at' , 'deleted_at' , 'id'] },
+            }
+          ]
+        },
+        {
+          model: Assignment,
+          as: 'assignment',
+          attributes: { exclude: ['term_id' , 'teacher_id' , 'deleted_at'] },
+          include: [
+            {
+              model: ClassSubject,
+              as: 'classSubjects',
+              attributes: { exclude: ['created_at' , 'updated_at' , 'deleted_at'] },
+              include: [
+                {
+                  model: ClassStream,
+                  as: 'classStream',
+                  attributes: { exclude: ['created_at' , 'updated_at' , 'deleted_at'] },
+                },
+                {
+                  model: Subject,
+                  as: 'subject',
+                  attributes: { exclude: ['created_at' , 'updated_at' , 'deleted_at'] },
+                },
+                {
+                  model: Teacher,
+                  as: 'teacher',
+                  attributes: { exclude: ['created_at' , 'updated_at' , 'deleted_at'] },
+                  include: [
+                    {
+                      model: User,
+                      as: 'user',
+                      attributes: { exclude: ['created_at' , 'updated_at' , 'deleted_at' , 'id'] },
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
       ],
-      attributes: { exclude: ['user_id'] },
-      raw: true
+      attributes: { exclude: ['assignment_id' , 'student_id'] }
     });
     return submission;
   } catch (error) {
@@ -49,20 +87,7 @@ export const updateSubmissionRepository = async (id, data) => {
 
 export const getAllSubmissionRepository = async () => {
   try {
-    const  submission = await Submission.findAll({
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: { 
-            exclude: ['password'],
-            include: ['email']
-           },
-        },
-      ],
-      attributes: { exclude: ['user_id' , 'permissions'] },
-      raw: true
-    });
+    const  submission = await Submission.findAll();
     return  submission;
   } catch (error) {
     throw error;
@@ -96,15 +121,92 @@ export const searchSubmissionRepository = async (query) => {
   const submission = await Submission.findAll({
     where: {
       [Op.or]: [
-        { first_name: { [Op.iLike]: `%${query}%` } },
-        { last_name: { [Op.iLike]: `%${query}%` } },
-        { email: { [Op.iLike]: `%${query}%` } },
+        { content: { [Op.iLike]: `%${query}%` } },
+        { external_url: { [Op.iLike]: `%${query}%` } }
       ],
     },
   });
 
   return submission;
 };
+
+export const getAllSubmissionByAssignmentIdRepository = async (id) => {
+  try {
+    const submission = await Submission.findAll({
+      where: {
+        assignment_id: id
+      },
+            include: [
+        {
+          model: Student,
+          as: 'student',
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: { exclude: ['created_at' , 'updated_at' , 'deleted_at' , 'id'] },
+            }
+          ]
+        }
+      ],
+      attributes: { exclude: ['assignment_id' , 'student_id'] }
+    });
+    return submission;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getAllSubmissionByStudentIdRepository = async (id) => {
+  try {
+    const submission = await Submission.findAll({
+      where: {
+        student_id: id
+      },
+            include: [
+        {
+          model: Assignment,
+          as: 'assignment',
+          attributes: { exclude: ['term_id' , 'teacher_id' , 'deleted_at'] },
+          include: [
+            {
+              model: ClassSubject,
+              as: 'classSubjects',
+              attributes: { exclude: ['created_at' , 'updated_at' , 'deleted_at'] },
+              include: [
+                {
+                  model: ClassStream,
+                  as: 'classStream',
+                  attributes: { exclude: ['created_at' , 'updated_at' , 'deleted_at'] },
+                },
+                {
+                  model: Subject,
+                  as: 'subject',
+                  attributes: { exclude: ['created_at' , 'updated_at' , 'deleted_at'] },
+                },
+                {
+                  model: Teacher,
+                  as: 'teacher',
+                  attributes: { exclude: ['created_at' , 'updated_at' , 'deleted_at'] },
+                  include: [
+                    {
+                      model: User,
+                      as: 'user',
+                      attributes: { exclude: ['created_at' , 'updated_at' , 'deleted_at' , 'id'] },
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+      ],
+      attributes: { exclude: ['assignment_id' , 'student_id'] }
+    });
+    return submission;
+  } catch (error) {
+    throw error;
+}}
 
 // export const checkDeletedUserRepository = async (email) => {
 //   try {

@@ -282,6 +282,30 @@ Terms.hasMany(Assignments, {
   onDelete: 'CASCADE',
 });
 
+Submissions.belongsTo(Assignments, {
+  foreignKey: 'assignment_id',
+  as: 'assignment',
+  onDelete: 'CASCADE',
+});
+
+Assignments.hasMany(Submissions, {
+  foreignKey: 'assignment_id',
+  as: 'submissions',
+  onDelete: 'CASCADE',
+});
+
+Submissions.belongsTo(Students, {
+  foreignKey: 'student_id',
+  as: 'student',
+  onDelete: 'CASCADE',
+});
+
+Students.hasMany(Submissions, {
+  foreignKey: 'student_id',
+  as: 'submissions',
+  onDelete: 'CASCADE',
+});
+
 export {
   AcademicYears,
   Admins,

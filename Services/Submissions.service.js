@@ -5,6 +5,8 @@ import {
   getAllSubmissionRepository,
   deleteSubmissionRepository,
   searchSubmissionRepository,
+  getAllSubmissionByAssignmentIdRepository,
+  getAllSubmissionByStudentIdRepository
 } from '../Repositories/Submission.repository.js';
 
 import {
@@ -78,15 +80,22 @@ export const getSubmissionByIdService = async (id) => {
 
 export const updateSubmissionService = async (id, data) => {
 
-    const {assignment_id , content , external_url  , status
+    const {content , external_url  , status
      } = data
 
      let is_late = false;
      let assignment_status = 'submitted' || status;
 
+         // check if submission exists
+    const submissionexists = await getSubmissionByIdRepository(id);
+    if(!submissionexists) {
+      const err = new Error('Submission not found');
+      err.statusCode = 404;
+      throw err;
+    }
 
     // check if assignments exists
-    const assignmentexists = await getAssignmentByIdRepository(assignment_id);
+    const assignmentexists = await getAssignmentByIdRepository(submissionexists.assignment_id);
     if(!assignmentexists) {
       const err = new Error('Assignment not found');
       err.statusCode = 404;
@@ -118,18 +127,12 @@ export const updateSubmissionService = async (id, data) => {
       throw err;
     }
 
-    // check if submission exists
-    const submissionexists = await getSubmissionByIdRepository(id);
-    if(!submissionexists) {
-      const err = new Error('Submission not found');
-      err.statusCode = 404;
-      throw err;
-    }
+
 
     let attempt_number = submissionexists.attempt_number + 1
 
     // Update user Details
-    const submission = await updateSubmissionRepository(id, {assignment_id , attempt_number , content , external_url ,
+    const submission = await updateSubmissionRepository(id, { attempt_number , content , external_url ,
        is_late , status:assignment_status});
 
     // TODO: Send email to submission
@@ -161,8 +164,8 @@ export const searchSubmissionService = async (query) => {
     err.statusCode = 400;
     throw err;
   }
-  const Admins = await searchSubmissionRepository(query);
-  return Admins;
+  const submission = await searchSubmissionRepository(query);
+  return submission;
 }
 
 export const getAdminService = async (id) => {
@@ -173,6 +176,34 @@ export const getAdminService = async (id) => {
 export const getAllSubmissionService = async () => {
 
   // TODO: Add pagination
-  const Admins = await getAllSubmissionRepository();
-  return Admins;
+  const submission = await getAllSubmissionRepository();
+  return submission;
+}
+
+export const getAllSubmissionByAssignmentIdService = async (id) => {
+
+      // check if assignments exists
+    const assignmentexists = await getAssignmentByIdRepository(id);
+    if(!assignmentexists) {
+      const err = new Error('Assignment not found');
+      err.statusCode = 404;
+      throw err;
+    }
+  // TODO: Add pagination
+  const submission = await getAllSubmissionByAssignmentIdRepository(id);
+  return submission;
+}
+
+export const getAllSubmissionByStudentIdService = async (id) => {
+
+      //  check if student exists
+    const studentexist = await getUserByIdRepository(id);
+    if(!studentexist) {
+      const err = new Error('Student not found');
+      err.statusCode = 404;
+      throw err;
+    }
+  // TODO: Add pagination
+  const submission = await getAllSubmissionByStudentIdRepository(id);
+  return submission;
 }

@@ -4,7 +4,9 @@ import {
   updateSubmissionService,
   getAllSubmissionService,
   deleteSubmissionService,
-  searchSubmissionService
+  searchSubmissionService,
+  getAllSubmissionByAssignmentIdService,
+  getAllSubmissionByStudentIdService
 } from '../Services/Submissions.service.js';
 
 
@@ -103,3 +105,35 @@ export const searchSubmissionController = async (req, res) => {
     res.status(error.statusCode || 500).json({ message: error.message });
   }
 }
+
+export const getAllSubmissionByAssignmentIdController = async (req, res) => {
+  
+
+  try {
+    const id = req.params.assignment_id
+    const submission = await getAllSubmissionByAssignmentIdService(id);
+
+    req.log.info({ userId: req.user.id }, 'Submissions fetched');
+    res.status(200).json(submission);
+
+  } catch (error) {
+    req.log.error({ err: error })
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+};
+
+export const getAllSubmissionByStudentIdController = async (req, res) => {
+  
+
+  try {
+    const id = req.params.student_id
+    const submission = await getAllSubmissionByStudentIdService(id);
+
+    req.log.info({ userId: req.user.id }, 'Submissions fetched');
+    res.status(200).json(submission);
+
+  } catch (error) {
+    req.log.error({ err: error })
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+};
