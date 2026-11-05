@@ -5,6 +5,7 @@ import {
   getAllDynamicQuestionRepository,
   deleteDynamicQuestionRepository,
   searchDynamicQuestionRepository,
+  getAllDynamicQuestionByAssignmentIdRepository
 } from '../Repositories/Dynamic_Questions.repository.js';
 
 import {
@@ -100,7 +101,7 @@ export const updateDynamicQuestionService = async (id , data) => {
     const {assignment_id , question_text , question_type , options,
       validation_rules , placeholder , help_text , is_required ,
       display_order , ask_timing , conditional_logic , is_admin_only , 
-      correct_answer, points
+      correct_answer, points , is_active
      } = data
 
     
@@ -169,7 +170,7 @@ export const updateDynamicQuestionService = async (id , data) => {
     // Create Admin if user does exist
     const dynamic_question = await updateDynamicQuestionRepository(id ,{assignment_id , question_text , question_type , options,
       validation_rules , placeholder , help_text , is_required ,
-      display_order , ask_timing , conditional_logic , is_admin_only , 
+      display_order , ask_timing , conditional_logic , is_admin_only , is_active , 
       correct_answer, points});
 
     return dynamic_question;
@@ -205,5 +206,20 @@ export const searchDynamicQuestionService = async (query) => {
   }
 
   const dynamic_question = await searchDynamicQuestionRepository(query);
+  return dynamic_question;
+}
+
+
+export const getAllDynamicQuestionByAssignmentIdService = async (id) => {
+
+      //  check if assignment exists
+    const assignmentexists = await getAssignmentByIdRepository(id);
+    if(!assignmentexists) {
+      const err = new Error('Assignment not found');
+      err.statusCode = 404;
+      throw err;
+    }
+
+  const dynamic_question = await getAllDynamicQuestionByAssignmentIdRepository(id);
   return dynamic_question;
 }

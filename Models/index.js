@@ -23,7 +23,7 @@ import RubricScore from './Rubric_Score.model.js';
 import Rubric from './Rubric.model.js';
 import Students from './Students.model.js';
 import Subjects from './Subjects.model.js';
-import Submission from './Submission.model.js';
+import Submissions from './Submission.model.js';
 import Teachers from './Teachers.model.js';
 import Terms from './Terms.model.js';
 import Users from './Users.model.js';
@@ -308,7 +308,7 @@ export {
   Rubric,
   Students,
   Subjects,
-  Submission,
+  Submissions,
   Teachers,
   Terms,
   Users,

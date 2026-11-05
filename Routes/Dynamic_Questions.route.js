@@ -5,7 +5,8 @@ import {
   updateDynamicQuestionController,
   getAllDynamicQuestionController,
   deleteDynamicQuestionController,
-  searchDynamicQuestionController
+  searchDynamicQuestionController,
+  getAllDynamicQuestionByAssignmentIdController
 } from "../Controllers/Dynamic_Questions.controller.js";
 
 
@@ -20,6 +21,7 @@ router.put("/update/:id", updateDynamicQuestionController);
 router.get("/all", getAllDynamicQuestionController);
 router.delete("/delete/:id", deleteDynamicQuestionController);
 router.get("/search", searchDynamicQuestionController);
+router.get("/assignment/:assignment_id", getAllDynamicQuestionByAssignmentIdController);
 
 
 export default router;

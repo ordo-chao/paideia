@@ -9,8 +9,6 @@ const Submission = sequelize.define('submissions', {
   attempt_number: { type: DataTypes.INTEGER, defaultValue: 1 },
   content: { type: DataTypes.TEXT },
   external_url: { type: DataTypes.STRING },
-  // TODO: check if I need quiz answers
-  // quiz_answers: { type: DataTypes.JSONB },
 
   submitted_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   is_late: { type: DataTypes.BOOLEAN, defaultValue: false },
@@ -35,7 +33,7 @@ const Submission = sequelize.define('submissions', {
       },
     },
   indexes: [
-    { unique: true, fields: ['assignment_id', 'student_id', 'attempt_number'] },
+    { unique: true, fields: ['assignment_id', 'student_id'] },
   ],
 });
 

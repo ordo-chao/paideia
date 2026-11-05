@@ -4,7 +4,8 @@ import {
   updateDynamicQuestionService,
   getAllDynamicQuestionService,
   deleteDynamicQuestionService,
-  searchDynamicQuestionService
+  searchDynamicQuestionService,
+  getAllDynamicQuestionByAssignmentIdService
 } from '../Services/Dynamic_Questions.service.js';
 
 
@@ -13,7 +14,7 @@ export const createDynamicQuestionController = async (req, res) => {
   try {
     const academicyear = await createDynamicQuestionService(req.body);
 
-    req.log.info({ userId: req.user.id }, 'Created Academic Year');
+    req.log.info({ userId: req.user.id }, 'Created Dynamic Question');
     res.status(200).json(academicyear);
 
   } catch (error) {
@@ -30,7 +31,7 @@ export const getDynamicQuestionByIdController = async (req, res) => {
     const id  = req.params.id
     const academicyear = await getDynamicQuestionByIdService(id);
 
-    req.log.info({ userId: req.user.id }, 'Academic Year fetched');
+    req.log.info({ userId: req.user.id }, 'Dynamic Question fetched');
     res.status(200).json(academicyear);
 
   } catch (error) {
@@ -47,7 +48,7 @@ export const updateDynamicQuestionController = async (req, res) => {
     const id = req.params.id;
     const academicyear = await updateDynamicQuestionService(id, req.body);
 
-    req.log.info({ userId: req.user.id }, 'Academic Year updated');
+    req.log.info({ userId: req.user.id }, 'Dynamic Question updated');
     res.status(200).json(academicyear);
 
   } catch (error) {
@@ -64,7 +65,7 @@ export const getAllDynamicQuestionController = async (req, res) => {
   try {
     const academicyears = await getAllDynamicQuestionService();
 
-    req.log.info({ userId: req.user.id }, 'Academic Years fetched');
+    req.log.info({ userId: req.user.id }, 'Dynamic Questions fetched');
     res.status(200).json(academicyears);
 
   } catch (error) {
@@ -80,8 +81,8 @@ export const deleteDynamicQuestionController = async (req, res) => {
     const id = req.params.id
     const academicyears = await deleteDynamicQuestionService(id);
 
-    req.log.info({ userId: req.user.id }, 'Academic Year deleted');
-    res.status(200).json({ message: 'Academic Year deleted successfully' });
+    req.log.info({ userId: req.user.id }, 'Dynamic Question deleted');
+    res.status(200).json({ message: 'Dynamic Question deleted successfully' });
 
   } catch (error) {
     req.log.error({ err: error })
@@ -92,10 +93,10 @@ export const deleteDynamicQuestionController = async (req, res) => {
 export const searchDynamicQuestionController = async (req, res) => {
 
   try {
-    const query = req.query.name
+    const query = req.query.query
     const academicyears = await searchDynamicQuestionService(query);
 
-    req.log.info({ userId: req.user.id }, 'Academic Years fetched');
+    req.log.info({ userId: req.user.id }, 'Dynamic Questions fetched');
     res.status(200).json(academicyears);
 
   } catch (error) {
@@ -103,3 +104,19 @@ export const searchDynamicQuestionController = async (req, res) => {
     res.status(error.statusCode || 500).json({ message: error.message });
   }
 }
+
+export const getAllDynamicQuestionByAssignmentIdController = async (req, res) => {
+  
+
+  try {
+    const id = req.params.assignment_id
+    const academicyears = await getAllDynamicQuestionByAssignmentIdService(id);
+
+    req.log.info({ userId: req.user.id }, 'Dynamic Questions fetched');
+    res.status(200).json(academicyears);
+
+  } catch (error) {
+    req.log.error({ err: error })
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+};
