@@ -17,7 +17,7 @@ import Grade from './Grade.model.js';
 import LearningMaterial from './Learning_Material.model.js';
 import MaterialView from './Material_View.model.js';
 import Parents from './Parents.model.js';
-import QuestionResponse from './Question_Response.model.js';
+import QuestionResponses from './Question_Response.model.js';
 import RubricCriterion from './Rubric_Criterion.model.js';
 import RubricScore from './Rubric_Score.model.js';
 import Rubric from './Rubric.model.js';
@@ -306,6 +306,30 @@ Students.hasMany(Submissions, {
   onDelete: 'CASCADE',
 });
 
+QuestionResponses.belongsTo(Submissions, {
+  foreignKey: 'submission_id',
+  as: 'submission',
+  onDelete: 'CASCADE',
+});
+
+Submissions.hasMany(QuestionResponses, {
+  foreignKey: 'submission_id',
+  as: 'questionResponses',
+  onDelete: 'CASCADE',
+});
+
+QuestionResponses.belongsTo(DynamicQuestions, {
+  foreignKey: 'question_id',
+  as: 'question',
+  onDelete: 'CASCADE',
+});
+
+DynamicQuestions.hasMany(QuestionResponses, {
+  foreignKey: 'question_id',
+  as: 'questionResponses',
+  onDelete: 'CASCADE',
+});
+
 export {
   AcademicYears,
   Admins,
@@ -326,7 +350,7 @@ export {
   LearningMaterial,
   MaterialView,
   Parents,
-  QuestionResponse,
+  QuestionResponses,
   RubricCriterion,
   RubricScore,
   Rubric,
