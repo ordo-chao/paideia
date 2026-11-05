@@ -68,6 +68,7 @@ import enrollmentsRouter from './Routes/Enrollments.route.js'
 import assignmentRouter from './Routes/Assignments.route.js'
 import dynamicQuestionRouter from './Routes/Dynamic_Questions.route.js'
 import submissionRouter from './Routes/Submission.route.js'
+import questionResponsesRouter from './Routes/Question_Responses.route.js'
 
 
 app.use('/user', userRouter);
@@ -86,6 +87,7 @@ app.use('/enrollments', enrollmentsRouter)
 app.use('/assignments', assignmentRouter)
 app.use('/dynamicquestions', dynamicQuestionRouter)
 app.use('/submissions', submissionRouter)
+app.use('/questionresponses', questionResponsesRouter)
 
 
 

@@ -5,7 +5,9 @@ import {
   updateSubmissionController,
   getAllSubmissionController,
   deleteSubmissionController,
-  searchSubmissionController
+  searchSubmissionController,
+  getAllSubmissionByAssignmentIdController,
+  getAllSubmissionByStudentIdController
 } from "../Controllers/Submissions.controller.js";
 
 
@@ -20,6 +22,8 @@ router.put("/update/:id", updateSubmissionController);
 router.get("/all", getAllSubmissionController);
 router.delete("/delete/:id", deleteSubmissionController);
 router.get("/search", searchSubmissionController);
+router.get("/assignment/:assignment_id", getAllSubmissionByAssignmentIdController);
+router.get("/student/:student_id", getAllSubmissionByStudentIdController);
 
 
 export default router;
